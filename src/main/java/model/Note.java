@@ -1,5 +1,7 @@
 package model;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 
 public class Note {
@@ -7,25 +9,27 @@ public class Note {
 	private String name; 
 	private DateTime createdAt;
 	private int size;
-	private boolean toDelete;
+	private String content;
 	
-	public boolean isToDelete() {
-		return toDelete;
-	}
-
-	public void setToDelete(boolean toDelete) {
-		this.toDelete = toDelete;
-	}
-
-	public Note(String name,  int size) {
+	public Note(String name,  String content) {
 		this.name=name;
-		this.size=size;
+		this.content=content;
+		this.size=content.length();
 		this.createdAt = DateTime.now();
 	}
 	
 	public Note() {
 		this.createdAt = DateTime.now();
 	}
+	
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 	public DateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -47,5 +51,13 @@ public class Note {
 		this.size = size;
 	}
 	
+	public String getFormattedDate(DateTime dateTime) {
+
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy, hh:mm");
+		return dateTime.toString(fmt);
+		//return dateTime.getHourOfDay()+":"+dateTime.getMinuteOfDay()+" "+dateTime.getDayOfYear()+"/"+dateTime.getMonthOfYear()+"/"+dateTime.getYear();
+	}
+	
+
 	
 }

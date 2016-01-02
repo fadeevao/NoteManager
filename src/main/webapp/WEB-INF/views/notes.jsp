@@ -1,36 +1,46 @@
 
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 
 
 <html>
 <head>
-    <title>Note List</title>
+<title>Note list</title>
 </head>
 <body>
 
-<h2>Note Information</h2>
-Notes added:  ${notes.size()}
+	<h2>All about your notebook</h2>
+	<p>Notes added: ${notes.size()}</p>
 
- <form action="/NoteManager/addNote">   
-    <input type="submit" value="Add another note">
- </form>
-<table>
-  <c:forEach items="${notes}" var="note"  varStatus="status">
-    <tr>
-      <td><c:out value="${note.getName()}" /></td>
-      <td><c:out value="${note.getSize()}" /></td>
-      <td><c:out value="${note.getCreatedAt()}" /></td>
-      <td><input TYPE=checkbox id="delete" VALUE="${note.toDelete}"> delete</td> 
-    </tr>
-  </c:forEach> 
-</table>
+	<form action="/NoteManager/addNote">
+		<input type="submit" value="Add a note">
+	</form>
 
 
-<c:if test="${notes.size() > 0}">
- <button type="submit">Delete selected notes</button>
-</c:if>
+	<form method="post" action="/NoteManager/deleteSelectedNotes" class="form">
+		<table>
+			<c:forEach items="${notes}" var="note" varStatus="status">
+				<tr>
+					<td><a href="/NoteManager/notes/${note.getName()}"><c:out
+								value="${note.getName()}" /></a></td>
+					<td><input type="checkbox" name="selected"
+						value="${note.name}"></td>
+				</tr>
+			</c:forEach>
+		</table>
+		<c:if test="${notes.size() > 0}">
+			<form action="/NoteManager/deleteSelectedNotes">
+				<input type="submit" value="Delete selected notes">
+			</form>
+		</c:if>
+	</form>
 
+	<c:if test="${notes.size() > 0}">
+		<form action="/NoteManager/delete">
+			<input type="submit" value="Delete all notes">
+		</form>
+	</c:if>
 
 </body>
 </html>

@@ -2,8 +2,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
 public class NoteManagerImpl implements NoteManager {
 	
 	ArrayList<Note> notes;
@@ -41,10 +39,22 @@ public class NoteManagerImpl implements NoteManager {
 		}
 		return null;
 	}
-	@RequestMapping("/notes")
+
+	@Override
 	public List<Note> getAllNotes() {
-		System.out.println("yaya, it works!!");
 		return notes;
 	}
+
+	@Override
+	public void deleteAllNotes() {
+		notes.removeAll(notes);
+	}
+
+	@Override
+	public void setNotes(List<Note> notes) {
+		this.notes=(ArrayList<Note>) notes;
+	}
+	
+	
 
 }

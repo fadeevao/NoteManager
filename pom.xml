@@ -39,9 +39,6 @@
 			<version>2.9.1</version>
 		</dependency>
    </dependencies>
- 
-	 
-	<!-- boilerplate code so Maven can generate a .war archive without requiring a web.xml file -->
 	<build>
         <pluginManagement>
             <plugins>
@@ -57,7 +54,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <finalName>Springapp</finalName>
     </build>
 	<artifactId>NoteManager</artifactId>
 </project>

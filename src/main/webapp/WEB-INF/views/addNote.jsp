@@ -1,7 +1,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <html>
 <head>
-    <title>Spring MVC Form Handling</title>
+    <title>Add a new note</title>
 </head>
 <body>
 
@@ -13,8 +13,8 @@
         <td><form:input path="name" /></td>
     </tr>
     <tr>
-        <td><form:label path="size">Size</form:label></td>
-        <td><form:input path="size" /></td>
+        <td><form:label path="content">Content</form:label></td>
+        <td><form:textarea path="content" /></td>
     </tr>
     <tr>
         <td colspan="2">
