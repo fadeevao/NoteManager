@@ -1,6 +1,8 @@
+<!DOCTYPE HTML>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="resources/metro.css"/>
     <title>Add a new note</title>
 </head>
 <body>
