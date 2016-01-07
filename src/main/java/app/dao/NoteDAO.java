@@ -9,9 +9,8 @@ public interface NoteDAO extends Serializable{
 	
 	    public List<Note> findAll();
 	    public void save(Note note);
-	    public void deleteNote(String name);
 	    public Note getNote(String name);
 	    public void deleteAllNotes();
-		void deleteNotesByName(List<String> names);
+		void deleteNotes(String[] id);
 
 }

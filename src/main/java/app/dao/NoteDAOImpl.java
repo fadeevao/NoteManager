@@ -1,5 +1,6 @@
 package app.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -7,27 +8,32 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.model.Note;
 
-
+@Transactional
 @Service("dao")
 public class NoteDAOImpl implements NoteDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	String hql;
+	private String hql;
+	
+	private Session session;
 
 	private static final long serialVersionUID = -58245061055944046L;
 
 
 	 public Session getSession()
      {
-          return sessionFactory.getCurrentSession();
+          if (sessionFactory.getCurrentSession() != null) {
+        	  return  sessionFactory.getCurrentSession();
+          } else {
+        	  return sessionFactory.openSession();
+          }
      }
 	
 	@SuppressWarnings("unchecked")
@@ -35,10 +41,11 @@ public class NoteDAOImpl implements NoteDAO {
 	public List<Note> findAll() {
 		
 		Transaction transaction = null;
+		session = getSession();
 		try {
-			transaction = getSession().beginTransaction();
+			transaction = session.beginTransaction();
 			hql = "FROM Note";
-			Query query = getSession().createQuery(hql);
+			Query query = session.createQuery(hql);
 			List results = query.list();
 			transaction.commit();
 			return results;
@@ -50,20 +57,22 @@ public class NoteDAOImpl implements NoteDAO {
 
 	@Override
 	public void save(Note note) {
-		getSession().beginTransaction();
-		getSession().save(note);
-		getSession().getTransaction().commit();
+		session = getSession();
+		session.beginTransaction();
+		session.save(note);
+		session.getTransaction().commit();
 	}
 
 	@Override
 	public Note getNote(String name) {
-		getSession().beginTransaction();
+		session = getSession();
+		session.beginTransaction();
 		hql = "FROM Note where name= :name";
-		Query query = getSession().createQuery(hql);
+		Query query = session.createQuery(hql);
 		query.setParameter("name", name);
 		List results = query.list();
 
-		getSession().getTransaction().commit();
+		session.getTransaction().commit();
 		return (Note) results.get(0);
 	}
 
@@ -71,8 +80,9 @@ public class NoteDAOImpl implements NoteDAO {
 	public void deleteAllNotes() {
 		
 		Transaction transaction = null;
+		session = getSession();
 		try {
-			transaction = getSession().beginTransaction();
+			transaction = session.beginTransaction();
 			hql = "delete from Note";
 			Query query = getSession().createQuery(hql);
 			query.executeUpdate();
@@ -84,14 +94,16 @@ public class NoteDAOImpl implements NoteDAO {
 	}
 
 	@Override
-	public void deleteNotesByName(List<String> names) {
-
+	public void deleteNotes(String[] selectedItems) {
+		
+		List<Long> ids = convertStringArrayToLong(selectedItems);
 		Transaction transaction = null;
+		session = getSession();
 		try {
-		transaction = getSession().beginTransaction();
-		hql = "delete FROM Note where name IN  (:names)";
-		Query query = getSession().createQuery(hql);
-		query.setParameterList("names", names);
+		transaction = session.beginTransaction();
+		hql = "delete FROM Note where id IN  (:ids)";
+		Query query = session.createQuery(hql);
+		query.setParameterList("ids", ids);
 		query.executeUpdate();
 		transaction.commit();
 		
@@ -100,10 +112,13 @@ public class NoteDAOImpl implements NoteDAO {
 			throw e;
 		}
 	}
-
-	@Override
-	public void deleteNote(String name) {
-		// TODO Auto-generated method stub
+	
+	private List<Long> convertStringArrayToLong(String[] array) {
+		List<Long> list = new ArrayList<Long>();
+		for (int i = 0; i < array.length; i++) {
+			  list.add(Long.valueOf(array[i]));
+			}
+		return list;
 		
 	}
 

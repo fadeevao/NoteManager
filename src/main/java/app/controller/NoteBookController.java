@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +32,7 @@ public class NoteBookController extends HttpServlet implements Serializable {
 	private static final long serialVersionUID = 3918673777710626949L;
 
 
-	
-    @RequestMapping(value ="/addNote", method = RequestMethod.POST)
+	@RequestMapping(value ="/addNote", method = RequestMethod.POST)
     public String addNote(ModelMap model, @ModelAttribute("note") Note note) {
     	dao.save(new Note(note.getName(), note.getContent()));
         model.addAttribute("notes",(ArrayList<Note>)  dao.findAll());
@@ -68,7 +65,9 @@ public class NoteBookController extends HttpServlet implements Serializable {
     @RequestMapping(value = "/deleteSelectedNotes", method = RequestMethod.POST)
     public String deleteSelectedNotes(ModelMap model,  HttpServletRequest request) throws FileNotFoundException, UnsupportedEncodingException {
     	String[] selectedNotes = request.getParameterValues("selected");
-    	dao.deleteNotesByName(Arrays.asList(selectedNotes));
+    	if (selectedNotes != null) {
+    		dao.deleteNotes(selectedNotes);
+    	}
     	return "redirect:/notes";
     }
     

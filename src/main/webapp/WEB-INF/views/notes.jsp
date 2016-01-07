@@ -25,7 +25,7 @@
 					<td><a href="/NoteManager/notes/${note.getName()}"><c:out
 								value="${note.getName()}" /></a></td>
 					<td><input type="checkbox" name="selected"
-						value="${note.name}"></td>
+						value="${note.getId()}"></td>
 				</tr>
 			</c:forEach>
 		</table>

@@ -6,12 +6,13 @@ public class ServletInitializer extends AbstractAnnotationConfigDispatcherServle
  
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] { AppConfig.class };
+    	 return new Class<?>[0];
     }
   
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return null;
+
+        return new Class[] { AppConfig.class };
     }
   
     @Override
