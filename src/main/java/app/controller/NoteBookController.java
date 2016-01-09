@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import app.dao.NoteDAOImpl;
 import app.model.Note;
+import app.model.NoteManagerImpl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +31,15 @@ public class NoteBookController extends HttpServlet implements Serializable {
 	private static final Logger log = Logger.getLogger(NoteBookController.class);
 	
 	@Autowired
-	private NoteDAOImpl dao;
+	private NoteManagerImpl noteManager;
 	
 	private static final long serialVersionUID = 3918673777710626949L;
 
 
 	@RequestMapping(value ="/addNote", method = RequestMethod.POST)
     public String addNote(ModelMap model, @ModelAttribute("note") Note note) {
-    	dao.save(new Note(note.getName(), note.getContent()));
-        model.addAttribute("notes",(ArrayList<Note>)  dao.findAll());
+    	noteManager.addNote(new Note(note.getName(), note.getContent()));
+        model.addAttribute("notes",(ArrayList<Note>)  noteManager.getAllNotes());
         log.info("Added a new note to collection with name: "+ note.getName());
         return "redirect:/notes";
     }
@@ -50,20 +51,20 @@ public class NoteBookController extends HttpServlet implements Serializable {
     
     @RequestMapping(value = "/notes", method = RequestMethod.GET)
     public String displayAllNotes(ModelMap model) {
-    	model.addAttribute("notes",  (ArrayList<Note>) dao.findAll());
+    	model.addAttribute("notes",  (ArrayList<Note>) noteManager.getAllNotes());
     	return "notes";
 }
     
     @RequestMapping(value = "/notes/{name}", method = RequestMethod.GET)
     public String displayNoteByName(ModelMap model, @PathVariable("name") String name) {
-    	model.addAttribute("note", dao.getNote(name));
+    	model.addAttribute("note", noteManager.getNote(name));
     	log.info("Retrieving details about a note: " + name);
     	return "note";
 }
     
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String deleteNotes(ModelMap model) {
-    	dao.deleteAllNotes();
+    	noteManager.deleteAllNotes();
     	return "redirect:/notes";
     }
     
@@ -71,7 +72,7 @@ public class NoteBookController extends HttpServlet implements Serializable {
     public String deleteSelectedNotes(ModelMap model,  HttpServletRequest request) throws FileNotFoundException, UnsupportedEncodingException {
     	String[] selectedNotes = request.getParameterValues("selected");
     	if (selectedNotes != null) {
-    		dao.deleteNotes(selectedNotes);
+    		noteManager.deleteSelectedNotes(selectedNotes);
     		log.info("Deleted notes: " + selectedNotes.length);
     	}
     	return "redirect:/notes";

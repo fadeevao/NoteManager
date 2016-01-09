@@ -20,7 +20,7 @@ import app.model.Note;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "app.controller", "app.dao" })
+@ComponentScan(basePackages = { "app.controller", "app.dao", "app.model" })
 public class AppConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public ViewResolver viewResolver() {

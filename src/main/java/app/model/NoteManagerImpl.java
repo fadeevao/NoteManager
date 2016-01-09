@@ -4,65 +4,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import app.dao.NoteDAOImpl;
 
+
+@Service("noteManager")
 public class NoteManagerImpl implements NoteManager, Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -9107161229527344088L;
 
-	ArrayList<Note> notes;
+	@Autowired
+	private NoteDAOImpl dao;
 	
 	public NoteManagerImpl() {
-		notes = new ArrayList<>();
 	}
 	
-	public void removeNote(int index) throws NoteException {
-		if (index<0 || index>notes.size()) {
-			throw new NoteException("Index is out of bounds");
-		} else {
-			notes.remove(index);
-		}
-	}
-
-	public void removeNote(Note note) {
-		notes.remove(note);
-	}
-
 	public void addNote(Note note) {
-		notes.add(note);
+		dao.save(new Note(note.getName(), note.getContent()));
 
-	}
-
-	public Note getNote(int index) {
-		return notes.get(index);
 	}
 
 	public Note getNote(String name) {
-		for (Note note : notes) {
-			if (note.getName().equals(name)) {
-				return note;
-			}
-		}
-		return null;
+		return  dao.getNote(name);
 	}
 
 	@Override
 	public List<Note> getAllNotes() {
-		return notes;
+		return  (ArrayList<Note>) dao.findAll();
 	}
 
 	@Override
 	public void deleteAllNotes() {
-		notes.removeAll(notes);
+		dao.deleteAllNotes();
 	}
 
 	@Override
-	public void setNotes(List<Note> notes) {
-		this.notes=(ArrayList<Note>) notes;
+	public void deleteSelectedNotes(String[] selectedNotes) {
+		dao.deleteNotes(selectedNotes);
 	}
 	
 	
