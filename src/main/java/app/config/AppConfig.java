@@ -31,15 +31,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		return viewResolver;
 	}
 
-	@Bean
-	@Autowired
-	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
-		HibernateTransactionManager txManager = new HibernateTransactionManager();
-		txManager.setSessionFactory(sessionFactory);
-
-		return txManager;
-	}
-
 	@Bean(name = "sessionFactory")
 	public SessionFactory sessionFactory() {
 
@@ -59,6 +50,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		SessionFactory factory = configuration.buildSessionFactory(builder.build());
 		return factory;
 	}
+	
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

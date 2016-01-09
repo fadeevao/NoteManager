@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import app.dao.NoteDAOImpl;
 import app.model.Note;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/")
 @Scope("session")
 public class NoteBookController extends HttpServlet implements Serializable {
+
+	private static final Logger log = Logger.getLogger(NoteBookController.class);
 	
 	@Autowired
 	private NoteDAOImpl dao;
@@ -36,6 +39,7 @@ public class NoteBookController extends HttpServlet implements Serializable {
     public String addNote(ModelMap model, @ModelAttribute("note") Note note) {
     	dao.save(new Note(note.getName(), note.getContent()));
         model.addAttribute("notes",(ArrayList<Note>)  dao.findAll());
+        log.info("Added a new note to collection with name: "+ note.getName());
         return "redirect:/notes";
     }
     
@@ -53,6 +57,7 @@ public class NoteBookController extends HttpServlet implements Serializable {
     @RequestMapping(value = "/notes/{name}", method = RequestMethod.GET)
     public String displayNoteByName(ModelMap model, @PathVariable("name") String name) {
     	model.addAttribute("note", dao.getNote(name));
+    	log.info("Retrieving details about a note: " + name);
     	return "note";
 }
     
@@ -67,6 +72,7 @@ public class NoteBookController extends HttpServlet implements Serializable {
     	String[] selectedNotes = request.getParameterValues("selected");
     	if (selectedNotes != null) {
     		dao.deleteNotes(selectedNotes);
+    		log.info("Deleted notes: " + selectedNotes.length);
     	}
     	return "redirect:/notes";
     }
