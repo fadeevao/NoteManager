@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import app.model.Note;
 
-@Transactional
+
 @Service("dao")
 public class NoteDAOImpl implements NoteDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	private String hql;
 	
 	private Session session;
@@ -73,7 +73,11 @@ public class NoteDAOImpl implements NoteDAO {
 		List results = query.list();
 
 		session.getTransaction().commit();
-		return (Note) results.get(0);
+		if (results.size()>0) {
+			return (Note) results.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -120,6 +124,14 @@ public class NoteDAOImpl implements NoteDAO {
 			}
 		return list;
 		
+	}
+	
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 
 }

@@ -2,19 +2,21 @@ package app.config;
 
 import java.util.Properties;
 
+import javax.sql.DataSource;
+
+import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 
 import app.model.Note;
 
@@ -50,6 +52,17 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		SessionFactory factory = configuration.buildSessionFactory(builder.build());
 		return factory;
 	}
+	
+	 @Bean
+	   public DataSource restDataSource() {
+	      BasicDataSource dataSource = new BasicDataSource();
+	      dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+	      dataSource.setUrl("jdbc:mysql://localhost:3306/notes");
+	      dataSource.setUsername("olga");
+	      dataSource.setPassword("olga");
+	 
+	      return dataSource;
+	   }
 	
 
 	@Override
