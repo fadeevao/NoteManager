@@ -8,24 +8,25 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import app.dao.NoteDAOImpl;
 import app.model.Note;
 import app.model.NoteManagerImpl;
+import app.model.User;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
  
 @Controller
 @RequestMapping("/")
-@Scope("session")
+@SessionAttributes("user")
 public class NoteBookController extends HttpServlet implements Serializable {
 
 	private static final Logger log = Logger.getLogger(NoteBookController.class);
@@ -50,8 +51,10 @@ public class NoteBookController extends HttpServlet implements Serializable {
     }
     
     @RequestMapping(value = "/notes", method = RequestMethod.GET)
-    public String displayAllNotes(ModelMap model) {
+    public String displayAllNotes(ModelMap model, HttpSession session) {
+    	User user = (User) session.getAttribute("user");
     	model.addAttribute("notes",  (ArrayList<Note>) noteManager.getAllNotes());
+    	model.addAttribute("user", user);
     	return "notes";
 }
     
@@ -59,6 +62,11 @@ public class NoteBookController extends HttpServlet implements Serializable {
     public String displayNoteByName(ModelMap model, @PathVariable("name") String name) {
     	model.addAttribute("note", noteManager.getNote(name));
     	log.info("Retrieving details about a note: " + name);
+    	 if(!model.containsAttribute("user")) {
+    	     System.out.println("blah");
+    	    }
+    	 User user = (User) model.get("user");
+    	 System.out.println(user.getUsername());
     	return "note";
 }
     

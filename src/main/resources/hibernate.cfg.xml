@@ -26,6 +26,8 @@
 		
         <!-- Mapping files -->
         <mapping class="app.model.Note"/>
+        <mapping class="app.model.User"/>
+        
      </session-factory>
          
 </hibernate-configuration>
