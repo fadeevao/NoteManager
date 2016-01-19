@@ -31,16 +31,17 @@ public class NoteBookController extends HttpServlet implements Serializable {
 
 	private static final Logger log = Logger.getLogger(NoteBookController.class);
 	
+	private User currentUser;
+	
 	@Autowired
 	private NoteManagerImpl noteManager;
 	
 	private static final long serialVersionUID = 3918673777710626949L;
 
-
 	@RequestMapping(value ="/addNote", method = RequestMethod.POST)
     public String addNote(ModelMap model, @ModelAttribute("note") Note note) {
-    	noteManager.addNote(new Note(note.getName(), note.getContent()));
-        model.addAttribute("notes",(ArrayList<Note>)  noteManager.getAllNotes());
+    	noteManager.addNote(new Note(note.getName(), note.getContent()), currentUser);
+        model.addAttribute("notes",(ArrayList<Note>)  noteManager.getAllNotes(currentUser.getId()));
         log.info("Added a new note to collection with name: "+ note.getName());
         return "redirect:/notes";
     }
@@ -52,9 +53,9 @@ public class NoteBookController extends HttpServlet implements Serializable {
     
     @RequestMapping(value = "/notes", method = RequestMethod.GET)
     public String displayAllNotes(ModelMap model, HttpSession session) {
-    	User user = (User) session.getAttribute("user");
-    	model.addAttribute("notes",  (ArrayList<Note>) noteManager.getAllNotes());
-    	model.addAttribute("user", user);
+    	currentUser = (User) session.getAttribute("user");
+    	model.addAttribute("notes",  (ArrayList<Note>) noteManager.getAllNotes(currentUser.getId()));
+    	model.addAttribute("user", currentUser);
     	return "notes";
 }
     

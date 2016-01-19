@@ -20,8 +20,8 @@ public class NoteManagerImpl implements NoteManager, Serializable {
 	public NoteManagerImpl() {
 	}
 	
-	public void addNote(Note note) {
-		dao.save(new Note(note.getName(), note.getContent()));
+	public void addNote(Note note, User user) {
+		dao.save(new Note(note.getName(), note.getContent(), user.getId()));
 
 	}
 
@@ -30,8 +30,8 @@ public class NoteManagerImpl implements NoteManager, Serializable {
 	}
 
 	@Override
-	public List<Note> getAllNotes() {
-		return  (ArrayList<Note>) dao.findAll();
+	public List<Note> getAllNotes(long id) {
+		return  (ArrayList<Note>) dao.findAll(id);
 	}
 
 	@Override

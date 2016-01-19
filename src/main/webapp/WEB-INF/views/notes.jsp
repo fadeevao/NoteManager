@@ -7,6 +7,7 @@
 <title>Note list</title>
 </head>
 <body>
+	<jsp:include page="logout.jsp" />
 
 	<h2>All about your notebook, ${user.getUsername()}</h2>
 	<p>Notes added: ${notes.size()}</p>
@@ -16,7 +17,8 @@
 	</form>
 
 
-	<form method="post" action="/NoteManager/deleteSelectedNotes" class="form">
+	<form method="post" action="/NoteManager/deleteSelectedNotes"
+		class="form">
 		<table>
 			<c:forEach items="${notes}" var="note" varStatus="status">
 				<tr>

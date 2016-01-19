@@ -6,11 +6,11 @@ import app.model.Note;;
 public interface NoteManager {
 	
 	
-	public void addNote(Note note);
+	public void addNote(Note note, User user);
 	
 	public Note getNote(String name);
 	
-	public List<Note> getAllNotes();
+	public List<Note> getAllNotes(long id);
 	
 	public void deleteAllNotes();
 	

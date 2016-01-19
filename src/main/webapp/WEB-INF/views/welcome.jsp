@@ -6,6 +6,7 @@
 <title>Welcome</title>
 </head>
 <body>
+	<jsp:include page="logout.jsp" />
 	<center>Welcome ${user}</center>
 	<a href="/NoteManager/notes"> Go to my notebook!</a>
 </body>

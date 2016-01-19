@@ -36,5 +36,9 @@ public class UserServiceImpl implements UserService
 		userDao.saveUser(user);
 		
 	}
+	
+	public long getIdForUserName(String username) {
+		return userDao.getId(username);
+	}
 
 }

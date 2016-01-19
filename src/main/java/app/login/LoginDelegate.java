@@ -31,4 +31,8 @@ public class LoginDelegate
 	public void saveUser(User user) {
 		userService.saveUser(user);
 	}
+	
+	public long getIdForUserFromLoginBean(LoginBean loginBean) {
+		return userService.getIdForUserName(loginBean.getUsername());
+	}
 }

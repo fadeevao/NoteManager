@@ -7,7 +7,7 @@ import app.model.Note;
 
 public interface NoteDAO extends Serializable{
 	
-	    public List<Note> findAll();
+	    public List<Note> findAll(long id);
 	    public void save(Note note);
 	    public Note getNote(String name);
 	    public void deleteAllNotes();

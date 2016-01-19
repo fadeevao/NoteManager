@@ -6,7 +6,7 @@
     <title>Add a new note</title>
 </head>
 <body>
-
+<jsp:include page="logout.jsp" />
 <h2>Note Information</h2>
 <form:form method="POST" modelAttribute="note" action="/NoteManager/addNote">
    <table>

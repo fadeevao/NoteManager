@@ -38,14 +38,15 @@ public class NoteDAOImpl implements NoteDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Note> findAll() {
+	public List<Note> findAll(long id) {
 		
 		Transaction transaction = null;
 		session = getSession();
 		try {
 			transaction = session.beginTransaction();
-			hql = "FROM Note";
+			hql = "FROM Note where user_id=:id";
 			Query query = session.createQuery(hql);
+			query.setParameter("id", id);
 			List results = query.list();
 			transaction.commit();
 			return results;

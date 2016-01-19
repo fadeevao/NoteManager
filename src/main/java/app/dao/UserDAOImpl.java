@@ -72,5 +72,23 @@ public class UserDAOImpl implements UserDAO {
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
+	
+	public long getId(String username) {
+		Transaction transaction= null;
+		session = getSession();
+			
+		try {
+			transaction = session.beginTransaction();
+			hql = "FROM User where username=:username";
+			Query query = session.createQuery(hql);
+			query.setParameter("username", username);
+			List<User> results = query.list();
+			transaction.commit();
+			return results.get(0).getId();
+		} catch (RuntimeException e) {
+			transaction.rollback();
+			throw e;
+		}
+	} 
 
 }

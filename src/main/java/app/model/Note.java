@@ -41,11 +41,21 @@ public class Note implements Serializable {
 	@Column(name="content")
 	private String content;
 	
+	@Column(name="user_id")
+	private long userId;
+
 	public Note(String name,  String content) {
 		this.name=name;
 		this.content=content;
 		this.size=content.length();
 		this.createdAt = DateTime.now();
+	}	
+	public Note(String name,  String content, long userId) {
+		this.name=name;
+		this.content=content;
+		this.size=content.length();
+		this.createdAt = DateTime.now();
+		this.userId = userId;
 	}
 	
 	public Note() {
@@ -87,6 +97,14 @@ public class Note implements Serializable {
 	}
 	public void setSize(int size) {
 		this.size = size;
+	}
+	
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 	
 	public String getFormattedDate(DateTime dateTime) {
