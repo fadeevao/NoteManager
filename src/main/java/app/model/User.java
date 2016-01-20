@@ -26,6 +26,12 @@ public class User implements Serializable {
 	
 	@Column
 	private String password;
+	
+	@Column
+	private String salt;
+
+	@Column
+	private String hash;
 
 	public long getId() {
 		return id;
@@ -51,5 +57,19 @@ public class User implements Serializable {
 		this.password = password;
 	}
 	
+	public String getSalt() {
+		return salt;
+	}
 
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
 }

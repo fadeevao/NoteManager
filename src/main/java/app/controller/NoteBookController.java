@@ -63,9 +63,6 @@ public class NoteBookController extends HttpServlet implements Serializable {
     public String displayNoteByName(ModelMap model, @PathVariable("name") String name) {
     	model.addAttribute("note", noteManager.getNote(name));
     	log.info("Retrieving details about a note: " + name);
-    	 if(!model.containsAttribute("user")) {
-    	     System.out.println("blah");
-    	    }
     	 User user = (User) model.get("user");
     	 System.out.println(user.getUsername());
     	return "note";
