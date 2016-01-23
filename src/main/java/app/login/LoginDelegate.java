@@ -32,10 +32,16 @@ public class LoginDelegate
 	{
 		this.userService = userService;
 	}
+	
+	public boolean checkUsernameExists(String username) {
+		return  userService.doesUserExist(username);
+	}
 
 	public boolean isValidUser(String username, String password) throws SQLException
 	{
-	    return userService.isValidUser(username, password);
+		String salt =  userService.getSaltForUsername(username);
+		String hash = generatePasswordHash(salt ,password);
+	    return userService.isValidUser(username, hash);
 	}
 	
 	public void saveUser(User user) {
@@ -50,6 +56,13 @@ public class LoginDelegate
 	private String generateSalt(int length) {
 		org.apache.commons.lang3.RandomStringUtils utils = new org.apache.commons.lang3.RandomStringUtils();
 		return utils.randomAscii(length);
+	}
+	
+	private String generatePasswordHash(String salt, String password) {
+		
+		String hash = hashGenerationHelper.generateSHA256(salt+password);
+		hash = hash.substring(0, 30);
+		return hash;
 	}
 	
 	private void generatePasswordHash(User user) {

@@ -28,16 +28,16 @@ public class UserDAOImpl implements UserDAO {
 
 	
 	@Override
-	public boolean isValidUser(String username, String password) {
+	public boolean isValidUser(String username, String hash) {
 		Transaction transaction= null;
 		session = getSession();
 			
 		try {
 			transaction = session.beginTransaction();
-			hql = "FROM User where username=:username and password=:password";
+			hql = "FROM User where username=:username and hash=:hash";
 			Query query = session.createQuery(hql);
 			query.setParameter("username", username);
-			query.setParameter("password", password);
+			query.setParameter("hash", hash);
 			List<User> results = query.list();
 			transaction.commit();
 			if (results.size()>0) {
@@ -90,5 +90,44 @@ public class UserDAOImpl implements UserDAO {
 			throw e;
 		}
 	} 
+	
+	public boolean doesUserExist(String username) {
+		Transaction transaction= null;
+		session = getSession();
+			
+		try {
+			transaction = session.beginTransaction();
+			hql = "FROM User where username=:username";
+			Query query = session.createQuery(hql);
+			query.setParameter("username", username);
+			List<User> results = query.list();
+			transaction.commit();
+			if (results.size()>0) {
+				return true;
+			}
+			return false;
+		} catch (RuntimeException e) {
+			transaction.rollback();
+			throw e;
+		}
+	}
+	
+	public String getSalt(String username) {
+		Transaction transaction= null;
+		session = getSession();
+			
+		try {
+			transaction = session.beginTransaction();
+			hql = "select salt FROM User where username=:username";
+			Query query = session.createQuery(hql);
+			query.setParameter("username", username);
+			List<String> results = query.list();
+			transaction.commit();
+			return results.get(0);
+		} catch (RuntimeException e) {
+			transaction.rollback();
+			throw e;
+		}
+	}
 
 }

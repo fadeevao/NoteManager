@@ -17,9 +17,9 @@ public class UserServiceImpl implements UserService
 	private UserDAOImpl userDao;
 	
 	@Override
-	public boolean isValidUser(String username, String password) throws SQLException
+	public boolean isValidUser(String username, String hash) throws SQLException
 	{
-		return userDao.isValidUser(username, password);
+		return userDao.isValidUser(username, hash);
 	}
 	
 	public UserDAOImpl getUserDao() {
@@ -39,6 +39,14 @@ public class UserServiceImpl implements UserService
 	
 	public long getIdForUserName(String username) {
 		return userDao.getId(username);
+	}
+	
+	public boolean doesUserExist(String username) {
+		return  userDao.doesUserExist(username);
+	}
+	
+	public String getSaltForUsername(String username) {
+		return userDao.getSalt(username);
 	}
 
 }

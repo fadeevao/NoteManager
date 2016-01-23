@@ -4,6 +4,6 @@ import java.sql.SQLException;
 
 public interface UserDAO
 {
-	public boolean isValidUser(String username, String password) throws SQLException;
+	public boolean isValidUser(String username, String hash) throws SQLException;
 }
 

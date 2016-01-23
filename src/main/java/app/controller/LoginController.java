@@ -46,30 +46,40 @@ public class LoginController
 	public ModelAndView executeLogin(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("loginBean")LoginBean loginBean)
 	{
 		ModelAndView model= null;
-		try
-		{
-			boolean isValidUser = loginDelegate.isValidUser(loginBean.getUsername(), loginBean.getPassword());
-			if(isValidUser)
+		boolean userExists = loginDelegate.checkUsernameExists(loginBean.getUsername());
+		
+		if (userExists) {
+		
+			try
 			{
-				long id = loginDelegate.getIdForUserFromLoginBean(loginBean);
-				model = new ModelAndView("welcome");
-				model.addObject("user", loginBean.getUsername());
-				User convertedUser = converter.convert(loginBean, id);
-				request.getSession().setAttribute("user", convertedUser); 
-				log.info("User " + convertedUser.getUsername() + "has logged in");
+				boolean isValidUser = loginDelegate.isValidUser(loginBean.getUsername(), loginBean.getPassword());
+				if(isValidUser)
+				{
+					long id = loginDelegate.getIdForUserFromLoginBean(loginBean);
+					model = new ModelAndView("welcome");
+					model.addObject("user", loginBean.getUsername());
+					User convertedUser = converter.convert(loginBean, id);
+					request.getSession().setAttribute("user", convertedUser); 
+					log.info("User " + convertedUser.getUsername() + "has logged in");
+				}
+				else
+				{
+					model = new ModelAndView("login");
+					model.addObject("loginBean", loginBean);
+					model.addObject("message", "Invalid credentials!!");
+					log.info("Invalid attempt to login");
+				}
+	
 			}
-			else
+			catch(Exception e)
 			{
-				model = new ModelAndView("login");
-				model.addObject("loginBean", loginBean);
-				model.addObject("message", "Invalid credentials!!");
-				log.info("Invalid attempt to login");
-			}
-
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
+				e.printStackTrace();
+			} 
+		} else {
+			model = new ModelAndView("login");
+			model.addObject("loginBean", loginBean);
+			model.addObject("message", "Invalid credentials!!");
+			log.info("Invalid attempt to login");
 		}
 
 		return model;
