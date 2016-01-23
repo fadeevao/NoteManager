@@ -18,7 +18,7 @@ import app.model.Note;
 
 @RunWith(SpringJUnit4ClassRunner.class)  
 @ContextConfiguration(locations="classpath:test-cfg.xml")  
-@TransactionConfiguration(defaultRollback=true,transactionManager="transactionManager")  
+@TransactionConfiguration(defaultRollback=false,transactionManager="transactionManager")  
 @WebAppConfiguration
 public class NoteDAOImplTest {
 	
@@ -26,7 +26,7 @@ public class NoteDAOImplTest {
 	private NoteDAOImpl dao;
 	
 	@Transactional
-	@Test  
+	@Test
     public void testGetNoteByName() {  
     Note note = dao.getNote("name");  
     assertNotNull(note);  
@@ -42,9 +42,9 @@ public class NoteDAOImplTest {
 	}  
 	
 	@Transactional
-	@Test  
-    public void integrationTestMultipleActions() {
-		List<Note> notes = dao.findAll();
+	@Test
+    public void testIntegrationMultipleActions() {
+		List<Note> notes = dao.findAll(1);
 		assertEquals(2, notes.size());
 		
 		Note one = notes.get(0);
@@ -57,31 +57,31 @@ public class NoteDAOImplTest {
 		
 		testSaveNote();
 		testDeleteSelectedNotes();
-		deleteAllNotes();
+		testDeleteAllNotes();
 	}
 	
 	private void testSaveNote() {
-		Note note = new Note("name3", "content3");
+		Note note = new Note("name4", "content4", 1);
 		dao.save(note);
-		assertEquals(3, dao.findAll().size());
-		assertEquals(note.getName(), dao.getNote("name3").getName());
-		assertEquals(note.getContent(), dao.getNote("name3").getContent());
+		assertEquals(3, dao.findAll(1).size());
+		assertEquals(note.getName(), dao.getNote("name4").getName());
+		assertEquals(note.getContent(), dao.getNote("name4").getContent());
 	}
 	
 	private void testDeleteSelectedNotes() {
 		dao.deleteNotes(new String[] {"2"});
 		
-		List<Note> notes = dao.findAll();
+		List<Note> notes = dao.findAll(1);
 		assertEquals(2, notes.size());
 		assertEquals("name", notes.get(0).getName());
 		assertEquals("name3", notes.get(1).getName());
 		
 	}
 	
-	private void deleteAllNotes() {
+	private void testDeleteAllNotes() {
 		dao.deleteAllNotes();
-		List<Note> notes = dao.findAll();
-		assertEquals(0, notes.size());
+		List<Note> notes = dao.findAll(1);
+		assertEquals(1, notes.size());
 	}
 
 }
