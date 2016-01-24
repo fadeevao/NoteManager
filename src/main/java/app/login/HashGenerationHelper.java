@@ -6,11 +6,9 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.log4j.Logger;
 
-import app.controller.NoteBookController;
-
 public class HashGenerationHelper {
 	
-	private static final Logger log = Logger.getLogger(NoteBookController.class);
+	private static final Logger log = Logger.getLogger(HashGenerationHelper.class);
 	
 	 public static String generateSHA256(String message) {
 	        try {
