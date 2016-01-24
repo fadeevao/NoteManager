@@ -78,7 +78,7 @@ public class LoginController
 		} else {
 			model = new ModelAndView("login");
 			model.addObject("loginBean", loginBean);
-			model.addObject("message", "Invalid credentials!!");
+			model.addObject("message", "Invalid credentials");
 			log.info("Invalid attempt to login");
 		}
 
@@ -95,16 +95,23 @@ public class LoginController
 	@RequestMapping(value="/register",method=RequestMethod.POST)
 	public ModelAndView executeRegistration(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("user")User user)
 	{
-		ModelAndView model = new ModelAndView("home");
-		try
-		{
-			loginDelegate.saveUser(user);
-			model.addObject("user" ,user);
-			log.info("New user has been registered with username: " + user.getUsername());
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
+		ModelAndView model =  null;
+		boolean userExists = loginDelegate.checkUsernameExists(user.getUsername());
+		if (!userExists) {
+			try
+			{
+				loginDelegate.saveUser(user);
+				log.info("New user has been registered with username: " + user.getUsername());
+				model = new ModelAndView("home");
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		} else {
+			model = new ModelAndView("register");
+			model.addObject("invalidUsernameMessage", "Invalid username");
+			log.error("Invalid attempt to register with existing credentials");
 		}
 
 		return model;

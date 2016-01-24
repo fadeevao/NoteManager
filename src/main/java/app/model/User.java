@@ -24,7 +24,6 @@ public class User implements Serializable {
 	@Column
 	private String username;
 	
-	@Column
 	private String password;
 	
 	@Column

@@ -74,7 +74,7 @@ public class NoteDAOImplTest {
 		List<Note> notes = dao.findAll(1);
 		assertEquals(2, notes.size());
 		assertEquals("name", notes.get(0).getName());
-		assertEquals("name3", notes.get(1).getName());
+		assertEquals("name4", notes.get(1).getName());
 		
 	}
 	
