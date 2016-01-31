@@ -31,6 +31,12 @@ public class User implements Serializable {
 
 	@Column
 	private String hash;
+	
+	public User() {}
+	
+	public User(String username) {
+		this.username = username;
+	}
 
 	public long getId() {
 		return id;
