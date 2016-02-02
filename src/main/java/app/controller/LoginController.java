@@ -28,11 +28,8 @@ public class LoginController
 	@Autowired
 	private LoginDelegate loginDelegate;
 	
-	private LoginBeanToUserConverter converter;
+	private LoginBeanToUserConverter converter = new LoginBeanToUserConverter();
 	
-	public LoginController() {
-		converter = new LoginBeanToUserConverter();
-	}
 
 	@RequestMapping(value="/login",method=RequestMethod.GET)
 	public ModelAndView displayLogin(HttpServletRequest request, HttpServletResponse response)

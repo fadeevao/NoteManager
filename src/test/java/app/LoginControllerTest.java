@@ -15,29 +15,28 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import app.controller.LoginController;
+import app.login.LoginBean;
 import app.login.LoginDelegate;
 import app.model.User;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
+
+@RunWith(MockitoJUnitRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations="classpath:test-cfg.xml")  
 public class LoginControllerTest {
 	
-	@Autowired
-	WebApplicationContext wac;
 	
 	@Mock
-	private LoginDelegate loginDelegate;
+	 LoginDelegate loginDelegate;
 
 	private MockMvc mockMvc;
 	
@@ -47,8 +46,13 @@ public class LoginControllerTest {
 
 	@Before
 	public void setup() {
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix("/WEB-INF/jsp/view/");
+        viewResolver.setSuffix(".jsp");
+		
+		
 		 MockitoAnnotations.initMocks(this);
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).dispatchOptions(true).build();
+	        this.mockMvc = MockMvcBuilders.standaloneSetup(loginController).setViewResolvers(viewResolver).build();
 	}
 	
 	@Test
@@ -84,5 +88,53 @@ public class LoginControllerTest {
 		 	.sessionAttr("user", user))
 		 	.andExpect(status().is(302)) //redirect
 		 	.andExpect(redirectedUrl("/home"));
+	}
+	
+	@Test
+	public void testExecuteLoginUserExistsAndPasswordIsCorrect() throws Exception{
+		LoginBean loginBean = new LoginBean();
+		loginBean.setUsername("username");
+		loginBean.setPassword("password");
+		Mockito.when(loginDelegate.checkUsernameExists(Mockito.anyString())).thenReturn(true);
+		Mockito.when(loginDelegate.isValidUser(Mockito.anyString(),Mockito.anyString())).thenReturn(true);
+		
+		this.mockMvc.perform(post("/login")
+				.param("username", loginBean.getUsername())
+				.param("password", loginBean.getPassword())
+	               )
+			.andExpect(status().isOk())
+			.andExpect(view().name("welcome"))
+			.andExpect(model().attributeExists("user") );
+	}
+	
+	@Test
+	public void testExecuteLoginUserExistsIncorrectPasswordSupplied() throws Exception{
+		LoginBean loginBean = new LoginBean();
+		loginBean.setUsername("username");
+		loginBean.setPassword("password");
+		Mockito.when(loginDelegate.checkUsernameExists(Mockito.anyString())).thenReturn(true);
+		Mockito.when(loginDelegate.isValidUser(Mockito.anyString(),Mockito.anyString())).thenReturn(false);
+		
+		this.mockMvc.perform(post("/login")
+				.param("username", loginBean.getUsername())
+				.param("password", loginBean.getPassword())
+	               )
+			.andExpect(status().isOk())
+			.andExpect(view().name("login"));
+	}
+	
+	@Test
+	public void testExecuteLoginUserDoesNotExist() throws Exception{
+		LoginBean loginBean = new LoginBean();
+		loginBean.setUsername("username");
+		loginBean.setPassword("password");
+		Mockito.when(loginDelegate.checkUsernameExists(Mockito.anyString())).thenReturn(false);
+		
+		this.mockMvc.perform(post("/login")
+				.param("username", loginBean.getUsername())
+				.param("password", loginBean.getPassword())
+	               )
+			.andExpect(status().isOk())
+			.andExpect(view().name("login"));
 	}
 }

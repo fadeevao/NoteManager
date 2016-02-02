@@ -16,13 +16,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import app.controller.NoteBookController;
 import app.model.Note;
@@ -30,13 +29,10 @@ import app.model.NoteManagerImpl;
 import app.model.User;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations="classpath:test-cfg.xml")  
 public class NoteBookControllerTest {
-	
-	@Autowired
-	WebApplicationContext wac;
 	
 	@Mock
 	private NoteManagerImpl noteManager;
@@ -49,8 +45,11 @@ public class NoteBookControllerTest {
 
 	@Before
 	public void setup() {
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix("/WEB-INF/jsp/view/");
+        viewResolver.setSuffix(".jsp");
 		 MockitoAnnotations.initMocks(this);
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).dispatchOptions(true).build();
+		this.mockMvc = MockMvcBuilders.standaloneSetup(noteBookController).setViewResolvers(viewResolver).build();
 	}
 	
 	@Test
@@ -94,6 +93,5 @@ public class NoteBookControllerTest {
 			.andExpect(status().isOk()) 
 			.andExpect(view().name("notes"));
 	}
-
 
 }
