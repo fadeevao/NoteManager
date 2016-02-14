@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -26,7 +28,9 @@ public class Note implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	private long id;
-
+	
+	@NotNull
+	@Size(min=2, max=30, message="Note name must be between 2 and 30 characters long")
 	@Column(name="name")
 	private String name; 
 	

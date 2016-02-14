@@ -3,6 +3,9 @@ package app.config;
 import java.util.Properties;
 
 import javax.sql.DataSource;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
@@ -16,7 +19,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 
 import app.model.Note;
 
@@ -71,6 +73,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	        resolver.setSuffix(".jsp");
 	        return resolver;
 	    }
+	 
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

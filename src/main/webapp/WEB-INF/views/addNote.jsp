@@ -2,7 +2,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="resources/metro.css"/>
+<link rel="stylesheet" type="text/css" href="resources/style.css"/>
     <title>Add a new note</title>
 </head>
 <body>
@@ -13,10 +13,12 @@
     <tr>
         <td><form:label path="name">Name</form:label></td>
         <td><form:input path="name" /></td>
+        <form:errors path="name"></form:errors>
     </tr>
     <tr>
         <td><form:label path="content">Content</form:label></td>
         <td><form:textarea path="content" /></td>
+        <form:errors path="content"></form:errors>
     </tr>
     <tr>
         <td colspan="2">
