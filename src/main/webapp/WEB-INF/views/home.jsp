@@ -1,15 +1,26 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<jsp:include page="parent.jsp" />
+
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Home</title>
-	</head>
-	<body>
-	<h2>Hey, you can log into your account in order to add notes to your notebook.</h2>
-		<a href="login">Login here!</a>
-	<h2>Alternatively, you can register to be able to create a notebook</h2>
-		<a href="register">Register here!</a>
-	</body>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Home</title>
+</head>
+<body>
+	<div class="dark-matter" style="text-align: center">
+		<h2>Hey, log into your account to add
+			notes</h2>
+		
+			<a href="login" class="button">Login</a>
+		
+		<h2>Alternatively, register to start
+			adding notes immediately!</h2>
+		
+			<a href="register" class="button">Register</a>
+	
+		<!-- https://upload.wikimedia.org/wikipedia/commons/d/d8/Language_bulletin_board_KSU.jpg -->
+		<img src="resources/images/bulletin_board.jpg" alt="Bulletin board">
+	</div>
+</body>
 </html>
