@@ -1,30 +1,29 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<jsp:include page="parent.jsp"/>
+<jsp:include page="parent.jsp" />
 <html>
 <head>
-    <title>Add a new note</title>
+<title>Add a new note</title>
 </head>
 <body>
-<jsp:include page="logout.jsp" />
-<h2>Note Information</h2>
-<form:form method="POST" modelAttribute="note" action="/NoteManager/addNote">
-   <table>
-    <tr>
-        <td><form:label path="name">Name</form:label></td>
-        <td><form:input path="name" /></td>
-        <form:errors path="name"></form:errors>
-    </tr>
-    <tr>
-        <td><form:label path="content">Content</form:label></td>
-        <td><form:textarea path="content" /></td>
-        <form:errors path="content"></form:errors>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <input type="submit" value="Submit"/>
-        </td>
-    </tr>
-</table>  
-</form:form>
+	<div class="dark-matter">
+		<jsp:include page="logout.jsp" />
+		<h2 style="margin-top: 30px">Add a new note:</h2>
+		<form:form method="POST" modelAttribute="note"
+			action="/NoteManager/addNote">
+
+			<form:label path="name">Title</form:label>
+			<form:input path="name" />
+			<form:errors path="name" class="error-message"></form:errors>
+
+			<form:label path="content">Content</form:label>
+			<form:textarea path="content" />
+			<form:errors path="content" class="error-message"></form:errors>
+			<br />
+
+			<input type="submit" value="Submit" class="button" />
+			<a href="notes" class="button">Go Back</a>
+
+		</form:form>
+	</div>
 </body>
 </html>

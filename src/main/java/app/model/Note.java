@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -30,6 +31,7 @@ public class Note implements Serializable {
 	private long id;
 	
 	@NotNull
+	@NotEmpty
 	@Size(min=2, max=30, message="Note name must be between 2 and 30 characters long")
 	@Column(name="name")
 	private String name; 
@@ -42,6 +44,7 @@ public class Note implements Serializable {
 	@Column(name="size")
 	private int size;
 	
+	@NotEmpty
 	@Column(name="content")
 	private String content;
 	

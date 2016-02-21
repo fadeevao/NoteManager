@@ -9,20 +9,22 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import app.model.Note;
-import app.model.NoteManagerImpl;
-import app.model.User;
+import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+
+import app.model.Note;
+import app.model.NoteManagerImpl;
+import app.model.User;
  
 @Controller
 @RequestMapping("/")
@@ -39,7 +41,10 @@ public class NoteBookController extends HttpServlet implements Serializable {
 	private static final long serialVersionUID = 3918673777710626949L;
 
 	@RequestMapping(value ="/addNote", method = RequestMethod.POST)
-    public String addNote(ModelMap model, @ModelAttribute("note") Note note) {
+    public String addNote(ModelMap model,@Valid @ModelAttribute("note") Note note, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "addNote";
+		}
     	noteManager.addNote(new Note(note.getName(), note.getContent()), currentUser);
         model.addAttribute("notes",(ArrayList<Note>)  noteManager.getAllNotes(currentUser.getId()));
         log.info("Added a new note to collection with name: "+ note.getName());
