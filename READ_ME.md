@@ -1,6 +1,6 @@
 Hi! 
 
-This is the first project I created to learn a bit of Spring and Hibernate in my free time. 
+This is the first project I created to learn a bit of Spring and Hibernate in my free time. Also, I wanted to explore integration testing and mocking in a bit more detail. 
 
 This project is a simple web application where a user can create an account, log into it and then start adding notes such as: interesting recipe, reminder about meeting and so on.
 
