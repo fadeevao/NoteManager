@@ -2,6 +2,9 @@ package app.login;
 
 import app.model.User;
 
+/*
+ * Helper class that converts login bean to user object
+ */
 public class LoginBeanToUserConverter {
 
 	public User convert(LoginBean bean, long id) {

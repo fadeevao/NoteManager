@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import app.dao.NoteDAOImpl;
+import app.dao.NoteDao;
 
 
 @Service("noteManager")
@@ -15,16 +15,16 @@ public class NoteManagerImpl implements NoteManager, Serializable {
 	private static final long serialVersionUID = -9107161229527344088L;
 
 	@Autowired
-	private NoteDAOImpl dao;
+	private NoteDao dao;
 	
-	public NoteManagerImpl() {
-	}
+	public NoteManagerImpl() {}
 	
+	@Override
 	public void addNote(Note note, User user) {
 		dao.save(new Note(note.getName(), note.getContent(), user.getId()));
-
 	}
-
+	
+	@Override
 	public Note getNote(String name) {
 		return  dao.getNote(name);
 	}

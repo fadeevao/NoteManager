@@ -9,11 +9,9 @@ import app.login.HashGenerationHelper;
 
 public class HashGenerationHelperTest {
 	
-	private HashGenerationHelper helper;
 	
 	@Before
 	public void setUp() {
-		helper = new HashGenerationHelper();
 	}
 	
 	@Test
@@ -21,8 +19,8 @@ public class HashGenerationHelperTest {
 		String messageOne = "messageOne";
 		String messageTwo = "messageTwo";
 		
-		String hashOne = helper.generateSHA256(messageOne);
-		String hashTwo = helper.generateSHA256(messageTwo);
+		String hashOne = HashGenerationHelper.generateSHA256(messageOne);
+		String hashTwo = HashGenerationHelper.generateSHA256(messageTwo);
 		assertFalse(hashOne.equals(hashTwo));
 		
 	}

@@ -1,7 +1,9 @@
 package app.login;
 
 
-
+/*
+ * Login bean used for passing details from  login form to the app
+ */
 public class LoginBean {
 	
 	

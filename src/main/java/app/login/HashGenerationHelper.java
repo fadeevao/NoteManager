@@ -6,24 +6,29 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.log4j.Logger;
 
+/*
+ * Helps to generate hash for salt+password using SHA-256
+ */
 public class HashGenerationHelper {
 	
 	private static final Logger log = Logger.getLogger(HashGenerationHelper.class);
 	
+	private static final String HASHING_ALGORITHM = "SHA-256";
+	
 	 public static String generateSHA256(String message) {
 	        try {
-				return hashString(message, "SHA-256");
+				return hashString(message);
 			} catch (UnsupportedEncodingException e) {
 				log.error("No supporting encoding found" + e.getStackTrace());
 			}
 	        return null;
 	    }
 	 
-	 private static String hashString(String message, String algorithm) throws UnsupportedEncodingException{
+	 private static String hashString(String message) throws UnsupportedEncodingException{
 	 
 	            MessageDigest digest;
 				try {
-					digest = MessageDigest.getInstance(algorithm);
+					digest = MessageDigest.getInstance(HASHING_ALGORITHM);
 				
 	            byte[] hashedBytes = digest.digest(message.getBytes("UTF-8"));
 	 

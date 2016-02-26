@@ -14,6 +14,9 @@ import javax.validation.constraints.Size;
 
 import javax.validation.constraints.Pattern;
 
+/*
+ * Database entity representing logged in user
+ */
 @Entity
 @Table(name="user")
 public class User implements Serializable {
@@ -30,17 +33,20 @@ public class User implements Serializable {
 	@Column
 	private String username;
 	
+	//not storing password in the db
 	@NotNull
 	@Size(min=5, max=20, message="Password must be between 5 and 20 characters long")
 	@Pattern(regexp="[a-zA-Z0-9]+", message="Password must contain alphanumerical characters")
 	@Transient
 	private String password;
 	
+	//salt stored in db for further password check
 	@Column
-	private String salt;
+	private String passwordSalt;
 
+	//password hash stored in db for password check when user next logs in 
 	@Column
-	private String hash;
+	private String passwordHash;
 	
 	
 	public User() {
@@ -75,19 +81,19 @@ public class User implements Serializable {
 	}
 	
 	public String getSalt() {
-		return salt;
+		return passwordSalt;
 	}
 
 	public void setSalt(String salt) {
-		this.salt = salt;
+		this.passwordSalt = salt;
 	}
 
 	public String getHash() {
-		return hash;
+		return passwordHash;
 	} 
 
 	public void setHash(String hash) {
-		this.hash = hash;
+		this.passwordHash = hash;
 	}
 	
 	@Override

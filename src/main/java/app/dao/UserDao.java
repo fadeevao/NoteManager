@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import app.model.User;
 
 @Service("userDao")
-public class UserDAOImpl implements UserDAO {
+public class UserDao {
 
 		
 	@Autowired
@@ -26,8 +26,11 @@ public class UserDAOImpl implements UserDAO {
 		return sessionFactory.getCurrentSession();
 	}
 
-	
-	@Override
+	/*
+	 * Used when a user tries to log in to check whether the provided user details and generated hash match database records
+	 * @param username
+	 * @param hash
+	 */
 	public boolean isValidUser(String username, String hash) {
 		Transaction transaction= null;
 		session = getSession();
@@ -64,15 +67,6 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 	
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
-
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-	
 	public long getId(String username) {
 		Transaction transaction= null;
 		session = getSession();
@@ -91,7 +85,11 @@ public class UserDAOImpl implements UserDAO {
 		}
 	} 
 	
-	public boolean doesUserExist(String username) {
+	/*
+	 * Checks whether the username that the user picked has already been taken by someone else 
+	 * @parma username 
+	 */
+	public boolean doesUsernamerExist(String username) {
 		Transaction transaction= null;
 		session = getSession();
 			
@@ -112,6 +110,10 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 	
+	/*
+	 * Returns salt for some specific username
+	 * @param username
+	 */
 	public String getSalt(String username) {
 		Transaction transaction= null;
 		session = getSession();
@@ -128,6 +130,15 @@ public class UserDAOImpl implements UserDAO {
 			transaction.rollback();
 			throw e;
 		}
+	}
+	
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 
 }

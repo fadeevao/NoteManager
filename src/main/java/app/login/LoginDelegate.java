@@ -11,7 +11,7 @@ import app.model.User;
 public class LoginDelegate
 {
 	@Autowired
-	private UserServiceImpl userService;
+	private UserService userService;
 	
 	HashGenerationHelper hashGenerationHelper;
 	
@@ -28,7 +28,7 @@ public class LoginDelegate
 		return this.userService;
 	}
 
-	public void setUserService(UserServiceImpl userService)
+	public void setUserService(UserService userService)
 	{
 		this.userService = userService;
 	}

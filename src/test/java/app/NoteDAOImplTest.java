@@ -13,7 +13,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import app.dao.NoteDAOImpl;
+import app.dao.NoteDao;
 import app.model.Note;
 
 @RunWith(SpringJUnit4ClassRunner.class)  
@@ -23,7 +23,7 @@ import app.model.Note;
 public class NoteDAOImplTest {
 	
 	@Autowired
-	private NoteDAOImpl dao;
+	private NoteDao dao;
 	
 	@Transactional
 	@Test

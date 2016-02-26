@@ -18,6 +18,10 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 
+/*
+ * Entity representing notes that users create
+ */
+
 @Entity
 @Table(name = "note")
 public class Note implements Serializable {
