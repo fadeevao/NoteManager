@@ -1,14 +1,9 @@
 package app;
 
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.ArrayList;
-
+import app.controller.NoteBookController;
+import app.entities.Note;
+import app.entities.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,25 +18,26 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import app.controller.NoteBookController;
-import app.model.Note;
-import app.model.NoteManagerImpl;
-import app.model.User;
+import java.util.ArrayList;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(locations="classpath:test-cfg.xml")  
+@ContextConfiguration(classes = {NoteManagerMainApp.class})
 public class NoteBookControllerIntegrationTest {
-	
+
 	@Mock
-	private NoteManagerImpl noteManager;
+	private NoteManager noteManager;
 
 	private MockMvc mockMvc;
-	
+
 	@InjectMocks
 	NoteBookController noteBookController;
-	
+
 
 	@Before
 	public void setup() {
@@ -51,46 +47,45 @@ public class NoteBookControllerIntegrationTest {
 		 MockitoAnnotations.initMocks(this);
 		this.mockMvc = MockMvcBuilders.standaloneSetup(noteBookController).setViewResolvers(viewResolver).build();
 	}
-	
+
 	@Test
 	public void testDeleteAllNotes() throws Exception {
 		 this.mockMvc.perform(get("/delete"))
 		            .andExpect(status().is(302)) //redirect
 		            .andExpect(redirectedUrl("/notes"));
 	}
-	
+
 	@Test
 	public void testDeleteSelectedNotes() throws Exception {
 		 this.mockMvc.perform(post("/deleteSelectedNotes"))
 		            .andExpect(status().is(302)) //redirect
 		            .andExpect(redirectedUrl("/notes"));
 	}
-	
+
 	@Test
 	public void testGetNote() throws Exception {
 		Mockito.when(noteManager.getNote("note1")).thenReturn(new Note());
 		 this.mockMvc.perform(get("/notes/note1")
 				 	.sessionAttr("user", new User("username")))
-		  			.andExpect(status().isOk()) 
+		  			.andExpect(status().isOk())
 		            .andExpect(view().name("note"));
 	}
-	
+
 	@Test
 	public void testAddNote() throws Exception {
-		
+
 		 this.mockMvc.perform(get("/addNote"))
-		  			.andExpect(status().isOk()) 
-		            .andExpect(view().name("addNote"));
+		  			.andExpect(status().isOk());
 	}
-	
+
 	@Test
 	public void testDisplayAllNotes() throws Exception {
 		User user = new User("Username");
-		user.setId(12345);
+		user.setId(12345L);
 		Mockito.when(noteManager.getAllNotes(12345)).thenReturn(new ArrayList<Note>());
 		 this.mockMvc.perform(get("/notes")
 			.sessionAttr("user", user))
-			.andExpect(status().isOk()) 
+			.andExpect(status().isOk())
 			.andExpect(view().name("notes"));
 	}
 

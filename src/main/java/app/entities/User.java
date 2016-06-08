@@ -1,18 +1,13 @@
-package app.model;
+package app.entities;
 
-import java.io.Serializable;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /*
  * Database entity representing logged in user
@@ -26,12 +21,13 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
-	private long id;
+	private Long id;
 	
 	@NotNull
 	@Size(min=2, max=30, message="Username must be between 2 and 30 characters long")
 	@Column
-	private String username;
+	@Transient
+	private String name;
 	
 	//not storing password in the db
 	@NotNull
@@ -52,24 +48,24 @@ public class User implements Serializable {
 	public User() {
 	}
 	
-	public User(String username) {
-		this.username = username;
+	public User(String name) {
+		this.name = name;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getName() {
+		return name;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getPassword() {
@@ -95,22 +91,39 @@ public class User implements Serializable {
 	public void setHash(String hash) {
 		this.passwordHash = hash;
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+
+		if (o == null || getClass() != o.getClass()) return false;
+
+		User user = (User) o;
+
+		return new EqualsBuilder()
+				.append(id, user.id)
+				.append(name, user.name)
+				.append(password, user.password)
+				.append(passwordSalt, user.passwordSalt)
+				.append(passwordHash, user.passwordHash)
+				.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37)
+				.append(id)
+				.append(name)
+				.append(password)
+				.append(passwordSalt)
+				.append(passwordHash)
+				.toHashCode();
+	}
+
 	@Override
 	public String toString() {
-		return "User with a name:" + username;
+		return "User with a name:" + name;
 	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof User)) {
-			return false;
-		}
-		
-		User otherUser = (User) obj;
-		if (otherUser.getUsername().equals(this.username)) {
-			return true;
-		}
-		return false;
-	}
+
+
 }

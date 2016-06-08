@@ -1,50 +1,38 @@
 package app.login;
 
 
-import java.sql.SQLException;
-
+import app.entities.User;
+import app.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import app.dao.UserDao;
-import app.model.User;
+import java.sql.SQLException;
 
 @Service("userService")
 public class UserService
 {
-	
+
 	@Autowired
-	private UserDao userDao;
-	
-	public boolean isValidUser(String username, String hash) throws SQLException
-	{
-		return userDao.isValidUser(username, hash);
-	}
-	
-	public UserDao getUserDao() {
-		return userDao;
-	}
+	private UserUtils userUtils;
 
-
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
-	}
+	public boolean areUserDetailsCorrect(String username, String hash) throws SQLException {
+        return userUtils.areUserDCredentialsCorrect(username, hash);
+    }
 
 	public void saveUser(User user) {
-		userDao.saveUser(user);
-		
+		userUtils.saveUser(user);
 	}
-	
+
 	public long getIdForUserName(String username) {
-		return userDao.getId(username);
+		return userUtils.getIdFromName(username);
 	}
-	
+
 	public boolean doesUserExist(String username) {
-		return  userDao.doesUsernamerExist(username);
+		return userUtils.isUserNameAlreadyInUse(username);
 	}
-	
+
 	public String getSaltForUsername(String username) {
-		return userDao.getSalt(username);
+		return userUtils.getSalt(username);
 	}
 
 }
