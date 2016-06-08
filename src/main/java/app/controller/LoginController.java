@@ -93,7 +93,7 @@ public class LoginController
 	}
 
 	@RequestMapping(value="/register",method=RequestMethod.POST)
-	public ModelAndView executeRegistration(@Valid User user, BindingResult bindingResult)
+	public ModelAndView executeRegistration(@Valid @ModelAttribute User user, BindingResult bindingResult)
 	{
 		ModelAndView modelAndView =  null;
 

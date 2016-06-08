@@ -1,6 +1,7 @@
 package app;
 
 
+import app.config.AppConfig;
 import app.controller.LoginController;
 import app.entities.User;
 import app.login.LoginBean;
@@ -27,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(MockitoJUnitRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {NoteManagerMainApp.class})
+@ContextConfiguration(classes = {AppConfig.class})
 public class LoginControllerIntegrationTest {
 
 
@@ -69,7 +70,7 @@ public class LoginControllerIntegrationTest {
 		            .andExpect(view().name("register"));
 	}
 
-	//@Test
+	@Test
 	public void testRegisterWithValidPassword() throws Exception{
 		User user = new User("username");
 		user.setPassword("password78964");
@@ -77,14 +78,14 @@ public class LoginControllerIntegrationTest {
 
 
 		this.mockMvc.perform(post("/register")
-				.param("username", "username")
+				.param("user", user.getName())
 				.param("password", user.getPassword())
 	               )
 			.andExpect(status().isOk())
 			.andExpect(view().name("home"));
 	}
 
-	//@Test
+	@Test
 	public void testRegisterWithInvalidPassword() throws Exception{
 		User user = new User();
 		user.setName("username");
