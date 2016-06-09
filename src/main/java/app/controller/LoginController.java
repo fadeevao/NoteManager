@@ -7,11 +7,11 @@ import app.login.LoginBeanToUserConverter;
 import app.login.LoginDelegate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 
-@RestController
+@Controller
 public class LoginController
 {
 	private static final Logger log = Logger.getLogger(LoginController.class);
@@ -31,14 +31,13 @@ public class LoginController
 
 	private LoginBeanToUserConverter converter = new LoginBeanToUserConverter();
 
-
 	@RequestMapping(value="/login",method=RequestMethod.GET)
 	public ModelAndView displayLogin(HttpServletRequest request, HttpServletResponse response)
 	{
-		ModelAndView entities = new ModelAndView("login");
+		ModelAndView model = new ModelAndView("login");
 		LoginBean loginBean = new LoginBean();
-		entities.addObject("loginBean", loginBean);
-		return entities;
+		model.addObject("loginBean", loginBean);
+		return model;
 	}
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public ModelAndView executeLogin(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("loginBean")LoginBean loginBean)
@@ -59,7 +58,7 @@ public class LoginController
 					model.addObject("user", loginBean.getUsername());
 					User convertedUser = converter.convert(loginBean, loginDelegate.getIdForUserFromLoginBean(loginBean));
 					request.getSession().setAttribute("user", convertedUser);
-					log.info("User " + convertedUser.getName() + "has logged in");
+					log.info("User " + convertedUser.getName() + " has logged in");
 				}
 				else
 				{
@@ -127,8 +126,8 @@ public class LoginController
 	@RequestMapping(value="/home",method=RequestMethod.GET)
 	public ModelAndView getHome(HttpServletRequest request, HttpServletResponse response)
 	{
-		ModelAndView entities = new ModelAndView("home");
-		return entities;
+		ModelAndView model = new ModelAndView("home");
+		return model;
 	}
 
 	@RequestMapping(value="/logout",method=RequestMethod.GET)

@@ -4,6 +4,7 @@ package app;
 import app.controller.NoteBookController;
 import app.entities.Note;
 import app.entities.User;
+import app.utils.NoteUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class NoteBookControllerIntegrationTest {
 
 	@Mock
-	private NoteManager noteManager;
+	private NoteUtils noteUtils;
 
 	private MockMvc mockMvc;
 
@@ -64,7 +65,7 @@ public class NoteBookControllerIntegrationTest {
 
 	@Test
 	public void testGetNote() throws Exception {
-		Mockito.when(noteManager.getNote("note1")).thenReturn(new Note());
+		Mockito.when(noteUtils.getNote("note1")).thenReturn(new Note());
 		 this.mockMvc.perform(get("/notes/note1")
 				 	.sessionAttr("user", new User("username")))
 		  			.andExpect(status().isOk())
@@ -82,7 +83,7 @@ public class NoteBookControllerIntegrationTest {
 	public void testDisplayAllNotes() throws Exception {
 		User user = new User("Username");
 		user.setId(12345L);
-		Mockito.when(noteManager.getAllNotes(12345)).thenReturn(new ArrayList<Note>());
+		Mockito.when(noteUtils.getAllNotes(12345)).thenReturn(new ArrayList<Note>());
 		 this.mockMvc.perform(get("/notes")
 			.sessionAttr("user", user))
 			.andExpect(status().isOk())

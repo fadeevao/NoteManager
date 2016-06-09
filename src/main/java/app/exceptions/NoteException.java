@@ -1,8 +1,6 @@
-package app.entities;
+package app.exceptions;
 
 public class NoteException extends Exception {
-
-	private static final long serialVersionUID = -4972545290276741760L;
 	
 	public NoteException(String msg) {
 		super(msg);

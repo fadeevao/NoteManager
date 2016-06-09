@@ -1,7 +1,7 @@
 package app.controller;
 
 
-import app.NoteManager;
+import app.utils.NoteUtils;
 import app.entities.Note;
 import app.entities.User;
 import org.apache.log4j.Logger;
@@ -30,37 +30,38 @@ public class NoteBookController extends HttpServlet implements Serializable {
 	private User currentUser;
 
 	@Autowired
-	private NoteManager noteManager;
+	private NoteUtils noteUtils;
 
 	private static final long serialVersionUID = 3918673777710626949L;
 
 	@RequestMapping(value ="/addNote", method = RequestMethod.POST)
-    public ModelAndView addNote(ModelMap entities, @Valid @ModelAttribute("note") Note note, BindingResult bindingResult) {
+    public ModelAndView addNote(ModelMap modelMap, @Valid @ModelAttribute("note") Note note, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return new ModelAndView("addNote");
 		}
-    	noteManager.addNote(new Note(note.getName(), note.getContent(), currentUser.getId()));
-        entities.addAttribute("notes",(ArrayList<Note>)  noteManager.getAllNotes(currentUser.getId()));
+    	noteUtils.addNote(new Note(note.getName(), note.getContent(), currentUser.getId()));
+        modelMap.addAttribute("notes",(ArrayList<Note>)  noteUtils.getAllNotes(currentUser.getId()));
         log.info("Added a new note to collection with name: "+ note.getName());
 		return new ModelAndView("redirect:/notes");
     }
 
     @RequestMapping(value = "/addNote", method = RequestMethod.GET)
-    public void addNote(ModelMap modelMap) {
+    public ModelAndView addNote(ModelMap modelMap) {
         modelMap.addAttribute("note", new Note());
+		return new ModelAndView("addNote");
     }
 
     @RequestMapping(value = "/notes", method = RequestMethod.GET)
     public ModelAndView displayAllNotes(ModelMap entities, HttpSession session) {
     	currentUser = (User) session.getAttribute("user");
-    	entities.addAttribute("notes",  (ArrayList<Note>) noteManager.getAllNotes(currentUser.getId()));
+    	entities.addAttribute("notes",  (ArrayList<Note>) noteUtils.getAllNotes(currentUser.getId()));
     	entities.addAttribute("user", currentUser);
     	return new ModelAndView("notes");
 }
 
     @RequestMapping(value = "/notes/{name}", method = RequestMethod.GET)
     public ModelAndView displayNoteByName(ModelMap entities, @PathVariable("name") String name) {
-    	entities.addAttribute("note", noteManager.getNote(name));
+    	entities.addAttribute("note", noteUtils.getNote(name));
     	log.info("Retrieving details about a note: " + name);
     	User user = (User) entities.get("user");
     	log.info("Current session user is: "+ user.getName());
@@ -69,7 +70,7 @@ public class NoteBookController extends HttpServlet implements Serializable {
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public ModelAndView deleteNotes(ModelMap entities) {
-    	noteManager.deleteAllNotes();
+    	noteUtils.deleteAllNotes();
     	return new ModelAndView("redirect:/notes");
     }
 
@@ -77,7 +78,7 @@ public class NoteBookController extends HttpServlet implements Serializable {
     public ModelAndView deleteSelectedNotes(ModelMap entities,  HttpServletRequest request) throws FileNotFoundException, UnsupportedEncodingException {
     	String[] selectedNotes = request.getParameterValues("selected");
     	if (selectedNotes != null) {
-    		noteManager.deleteSelectedNotes(selectedNotes);
+    		noteUtils.deleteSelectedNotes(selectedNotes);
     		log.info("Deleted notes: " + selectedNotes.length);
     	}
     	return new ModelAndView("redirect:/notes");

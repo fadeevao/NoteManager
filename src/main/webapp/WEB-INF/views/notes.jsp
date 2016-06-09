@@ -10,14 +10,14 @@
 	<div class="dark-matter">
 	<jsp:include page="logout.jsp" />
 
-	<h2 style="margin-top: 30px; font-size: 40px;">All about your notebook, ${user.getUsername()}!</h2>
+	<h2 style="margin-top: 30px; font-size: 40px;">All about your notebook, ${user.getName()}!</h2>
 	<p id="numberOfNotes">Currently you've got <b>${notes.size()}</b> notes in your notebook. Why not add more?</p>
 
 
 	<a href="addNote" class="button">Add a new note</a>
 
 
-	<form method="post" action="/NoteManager/deleteSelectedNotes"
+	<form method="post" action="/deleteSelectedNotes"
 		class="form">
 		<div id="wrap">
 			<c:forEach items="${notes}" var="note" varStatus="status">
@@ -25,7 +25,7 @@
 
 				<div class="box">
 					<div class="innerContent">
-						<a class="noteInfo" href="/NoteManager/notes/${note.getName()}"><c:out
+						<a class="noteInfo" href="/notes/${note.getName()}"><c:out
 								value="${note.getName()}" /></a>
 						<div class="roundedTwo">
 							<input id="roundedTwo" type="checkbox" name="selected"
@@ -40,14 +40,14 @@
 
 		<c:if test="${notes.size() > 0}">
 		
-			<form action="/NoteManager/deleteSelectedNotes" >
+			<form action="/deleteSelectedNotes" >
 				<input class="button" type="submit" style="margin-top: 30px" value="Delete selected notes">
 			</form>
 		</c:if>
 	</form>
 
 	<c:if test="${notes.size() > 0}">
-		<form action="/NoteManager/delete" >
+		<form action="/delete" >
 			<input type="submit" class="button" style="margin-top: 10px" value="Delete all notes">
 		</form>
 	</c:if>

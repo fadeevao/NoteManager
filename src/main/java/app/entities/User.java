@@ -26,7 +26,6 @@ public class User implements Serializable {
 	@NotNull
 	@Size(min=2, max=30, message="Username must be between 2 and 30 characters long")
 	@Column
-	@Transient
 	private String name;
 	
 	//not storing password in the db

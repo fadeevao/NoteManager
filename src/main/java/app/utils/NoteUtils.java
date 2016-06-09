@@ -1,14 +1,12 @@
-package app;
+package app.utils;
 
 import app.entities.Note;
 import app.repos.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-
 @Component
-public class NoteManager {
+public class NoteUtils {
 
     @Autowired
     NoteRepository noteRepository;
@@ -22,7 +20,7 @@ public class NoteManager {
     }
 
 	public Iterable<Note> getAllNotes(long id){
-        return noteRepository.findAll(Collections.singletonList(id));
+        return noteRepository.findByUserId(id);
     }
 
 	public void deleteAllNotes() {

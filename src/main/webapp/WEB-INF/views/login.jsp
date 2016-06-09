@@ -15,10 +15,10 @@
 			<p class="error-message">Invalid credentials! Please double check your details and try again.</p>
 		</c:if>
 
-		<form:label path="name">Enter your name</form:label>
-		<form:input id="name" name="name" path="name" placeholder="Your name"/>
+		<form:label path="username">Enter your name</form:label>
+		<form:input id="username" name="username" path="username" placeholder="Your name"/>
 		<br>
-		<form:label path="name">Please enter your password</form:label>
+		<form:label path="password">Please enter your password</form:label>
 		<form:password id="password" name="password" path="password" placeholder="Your password"/>
 		<br>
 		<input type="submit" value="Login" class="button"/>

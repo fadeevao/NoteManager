@@ -24,12 +24,12 @@ public class UserUtils {
 	 */
     public boolean areUserDCredentialsCorrect(String name, String hash) {
         List<User> users = userRepository.findByNameAndPasswordHash(name, hash);
-        return users.isEmpty();
+        return !users.isEmpty();
     }
 
     public boolean isUserNameAlreadyInUse(String name) {
         List<User> users = userRepository.findByName(name);
-        return users.isEmpty();
+        return !users.isEmpty();
     }
 
     public Long getIdFromName(String name) {

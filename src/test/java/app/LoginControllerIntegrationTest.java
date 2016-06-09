@@ -1,7 +1,6 @@
 package app;
 
 
-import app.config.AppConfig;
 import app.controller.LoginController;
 import app.entities.User;
 import app.login.LoginBean;
@@ -28,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(MockitoJUnitRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {AppConfig.class})
+@ContextConfiguration(classes = {NoteManagerMainApp.class})
 public class LoginControllerIntegrationTest {
 
 

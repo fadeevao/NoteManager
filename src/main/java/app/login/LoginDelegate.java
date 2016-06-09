@@ -1,17 +1,18 @@
 package app.login;
 
 import app.entities.User;
+import app.utils.UserUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 
-@Service("loginDelegate")
+@Component
 public class LoginDelegate
 {
 	@Autowired
-	private UserService userService;
+	private UserUtils userUtils;
 
 	HashGenerationHelper hashGenerationHelper;
 
@@ -24,23 +25,23 @@ public class LoginDelegate
 	}
 
 	public boolean checkUsernameExists(String username) {
-		return  userService.doesUserExist(username);
+		return  userUtils.isUserNameAlreadyInUse(username);
 	}
 
 	public boolean isValidUser(String username, String password) throws SQLException
 	{
-		String salt =  userService.getSaltForUsername(username);
+		String salt =  userUtils.getSalt(username);
 		String hash = generatePasswordHash(salt ,password);
-	    return userService.areUserDetailsCorrect(username, hash);
+	    return userUtils.areUserDCredentialsCorrect(username, hash);
 	}
 
 	public void saveUser(User user) {
 		generatePasswordHash(user);
-		userService.saveUser(user);
+		userUtils.saveUser(user);
 	}
 
 	public long getIdForUserFromLoginBean(LoginBean loginBean) {
-		return userService.getIdForUserName(loginBean.getUsername());
+		return userUtils.getIdFromName(loginBean.getUsername());
 	}
 
 	private String generatePasswordHash(String salt, String password) {
