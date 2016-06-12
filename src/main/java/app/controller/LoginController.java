@@ -1,23 +1,24 @@
 package app.controller;
 
 
+import app.CurrentUser;
+import app.LogoutHandler;
 import app.entities.User;
 import app.login.LoginBean;
 import app.login.LoginBeanToUserConverter;
 import app.login.LoginDelegate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 
@@ -26,24 +27,38 @@ public class LoginController
 {
 	private static final Logger log = Logger.getLogger(LoginController.class);
 
+
+	private CurrentUser currentUser;
+
+	@Autowired
+	private LogoutHandler logoutHandler;
+
 	@Autowired
 	private LoginDelegate loginDelegate;
 
 	private LoginBeanToUserConverter converter = new LoginBeanToUserConverter();
 
 	@RequestMapping(value="/login",method=RequestMethod.GET)
-	public ModelAndView displayLogin(HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView displayLogin()
 	{
 		ModelAndView model = new ModelAndView("login");
 		LoginBean loginBean = new LoginBean();
 		model.addObject("loginBean", loginBean);
 		return model;
 	}
+
+	@RequestMapping(value="/welcome", method=RequestMethod.GET)
+	public ModelAndView welcome(HttpServletRequest request) {
+		currentUser =  (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		ModelAndView model = new ModelAndView("welcome");
+		model.addObject("user", currentUser.getUsername());
+		return model;
+	}
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public ModelAndView executeLogin(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("loginBean")LoginBean loginBean)
+	public ModelAndView executeLogin(@ModelAttribute("loginBean")LoginBean loginBean)
 	{
 		ModelAndView model= null;
-		boolean userExists = loginDelegate.checkUsernameExists(loginBean.getUsername());
+		boolean userExists = loginDelegate.checkUsernameExists(loginBean.getName());
 
 		//check if username exists
 		if (userExists) {
@@ -51,13 +66,12 @@ public class LoginController
 			try
 			{
 				//check if overall credentials provided are valid
-				boolean isValidUser = loginDelegate.isValidUser(loginBean.getUsername(), loginBean.getPassword());
+				boolean isValidUser = loginDelegate.isValidUser(loginBean.getName(), loginBean.getPassword());
 				if(isValidUser)
 				{
 					model = new ModelAndView("welcome");
-					model.addObject("user", loginBean.getUsername());
+					model.addObject("user", loginBean.getName());
 					User convertedUser = converter.convert(loginBean, loginDelegate.getIdForUserFromLoginBean(loginBean));
-					request.getSession().setAttribute("user", convertedUser);
 					log.info("User " + convertedUser.getName() + " has logged in");
 				}
 				else
@@ -71,7 +85,7 @@ public class LoginController
 			}
 			catch(Exception e)
 			{
-				log.error("Exception occured when user tried to log into the app", e);
+				log.error("Exception occurred when user tried to log into the app", e);
 			}
 		} else {
 			model = new ModelAndView("login");
@@ -84,15 +98,15 @@ public class LoginController
 	}
 
 	@RequestMapping(value="/register",method=RequestMethod.GET)
-	public ModelAndView displayRegistration(HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView displayRegistration()
 	{
 		ModelAndView model = new ModelAndView("register");
-		model.addObject("user", new User());
+		model.addObject("user", new LoginBean());
 		return model;
 	}
 
 	@RequestMapping(value="/register",method=RequestMethod.POST)
-	public ModelAndView executeRegistration(@Valid @ModelAttribute User user, BindingResult bindingResult)
+	public ModelAndView executeRegistration(@Valid @ModelAttribute LoginBean user, BindingResult bindingResult)
 	{
 		ModelAndView modelAndView =  null;
 
@@ -124,20 +138,16 @@ public class LoginController
 	}
 
 	@RequestMapping(value="/home",method=RequestMethod.GET)
-	public ModelAndView getHome(HttpServletRequest request, HttpServletResponse response)
+	public ModelAndView getHome()
 	{
 		ModelAndView model = new ModelAndView("home");
 		return model;
 	}
 
 	@RequestMapping(value="/logout",method=RequestMethod.GET)
-	public ModelAndView logout(HttpServletRequest request, HttpSession session, SessionStatus status) {
-	    status.setComplete();
-	    User user = (User) session.getAttribute("user");
-	    request.removeAttribute("user");
-	    log.info("User" + user.getName() + " has logged out");
+	public ModelAndView logout(HttpServletRequest request, HttpServletResponse httpServletResponse) {
+		logoutHandler.logout(request, httpServletResponse, SecurityContextHolder.getContext().getAuthentication());
 		return new ModelAndView("redirect:/home");
-	    //return "redirect:/home";
 	}
 
 }

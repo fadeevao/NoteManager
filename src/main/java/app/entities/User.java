@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -27,28 +26,26 @@ public class User implements Serializable {
 	@Size(min=2, max=30, message="Username must be between 2 and 30 characters long")
 	@Column
 	private String name;
-	
-	//not storing password in the db
-	@NotNull
-	@Size(min=5, max=20, message="Password must be between 5 and 20 characters long")
-	@Pattern(regexp="[a-zA-Z0-9]+", message="Password must contain alphanumerical characters")
-	@Transient
-	private String password;
-	
-	//salt stored in db for further password check
-	@Column
-	private String passwordSalt;
 
 	//password hash stored in db for password check when user next logs in 
 	@Column
 	private String passwordHash;
+
+
+	@Column
+	private String role = "USER";
 	
 	
 	public User() {
 	}
-	
+
 	public User(String name) {
 		this.name = name;
+	}
+	
+	public User(String name, String passwordHash) {
+		this.name = name;
+		this.passwordHash = passwordHash;
 	}
 
 	public Long getId() {
@@ -67,28 +64,20 @@ public class User implements Serializable {
 		this.name = name;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public String getSalt() {
-		return passwordSalt;
-	}
-
-	public void setSalt(String salt) {
-		this.passwordSalt = salt;
-	}
-
 	public String getHash() {
 		return passwordHash;
 	} 
 
 	public void setHash(String hash) {
 		this.passwordHash = hash;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	@Override
@@ -102,8 +91,6 @@ public class User implements Serializable {
 		return new EqualsBuilder()
 				.append(id, user.id)
 				.append(name, user.name)
-				.append(password, user.password)
-				.append(passwordSalt, user.passwordSalt)
 				.append(passwordHash, user.passwordHash)
 				.isEquals();
 	}
@@ -113,8 +100,6 @@ public class User implements Serializable {
 		return new HashCodeBuilder(17, 37)
 				.append(id)
 				.append(name)
-				.append(password)
-				.append(passwordSalt)
 				.append(passwordHash)
 				.toHashCode();
 	}

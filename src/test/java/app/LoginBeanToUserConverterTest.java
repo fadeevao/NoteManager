@@ -25,12 +25,11 @@ public class LoginBeanToUserConverterTest {
 	public void testConvertion() {
 		LoginBean bean = new LoginBean();
 		bean.setPassword(PASSWORD);
-		bean.setUsername(USERNAME);
+		bean.setName(USERNAME);
 
 		User user = converter.convert(bean, ID);
 		assertEquals(user.getName(), USERNAME);
 		assertEquals(user.getId(), ID);
-		assertEquals(user.getSalt(), null);
 		assertEquals(user.getHash(), null);
 	}
 

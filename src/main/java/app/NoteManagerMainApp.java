@@ -27,7 +27,7 @@ public class NoteManagerMainApp extends WebMvcConfigurerAdapter {
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }
-    
+
 
     @Override
     public void configureDefaultServletHandling(

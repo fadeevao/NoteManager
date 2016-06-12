@@ -28,17 +28,14 @@ public class UserUtils {
     }
 
     public boolean isUserNameAlreadyInUse(String name) {
-        List<User> users = userRepository.findByName(name);
-        return !users.isEmpty();
+        User user = userRepository.findByName(name);
+        return user != null;
     }
 
     public Long getIdFromName(String name) {
-        return userRepository.findByName(name).get(0).getId();
+        return userRepository.findByName(name).getId();
     }
 
-    public String getSalt(String name) {
-        return userRepository.findByName(name).get(0).getSalt();
-    }
 
 }
 

@@ -9,14 +9,14 @@
 </head>
 
 <body>
-	<form:form id="loginForm" method="post" action="login"
+	<form:form id="loginForm" method="post" action="/login"
 		modelAttribute="loginBean" class="dark-matter">
 		<c:if test="${not empty message}">
 			<p class="error-message">Invalid credentials! Please double check your details and try again.</p>
 		</c:if>
 
-		<form:label path="username">Enter your name</form:label>
-		<form:input id="username" name="username" path="username" placeholder="Your name"/>
+		<form:label path="name">Enter your name</form:label>
+		<form:input id="name" name="name" path="name" placeholder="Your name"/>
 		<br>
 		<form:label path="password">Please enter your password</form:label>
 		<form:password id="password" name="password" path="password" placeholder="Your password"/>
