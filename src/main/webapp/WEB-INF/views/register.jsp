@@ -13,16 +13,16 @@
 	<form:form id="registerForm" method="post" action="register"
 		modelAttribute="user" class="dark-matter">
 		<c:if test="${not empty invalidUsernameMessage}">
-			<p  class="error-message">User with such name already exists. Please pick another name.</p>
+			<p  class="error-message">User with such username already exists. Please pick another username.</p>
 		</c:if>
-		<form:label path="name" class="error_message" >Please enter your name</form:label>
-		<form:input id="name" name="name" path="name"
-			placeholder="Your name" />
-		<form:errors path="name" class="error-message"></form:errors>
+		<form:label path="username" class="error_message" >Please enter your username</form:label>
+		<form:input id="username" username="username" path="username"
+			placeholder="Your username" />
+		<form:errors path="username" class="error-message"></form:errors>
 		<br>
 
 		<form:label path="password">Please enter your password</form:label>
-		<form:password id="password" name="password" path="password"
+		<form:password id="password" username="password" path="password"
 			placeholder="Your password" />
 		<form:errors path="password" class="error-message" ></form:errors>
 		<br>

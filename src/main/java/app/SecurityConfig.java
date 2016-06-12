@@ -10,17 +10,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
+@EnableWebMvc
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private AuthenticationHandler authenticationHandler;
+    private UserDetailsService userService;
 
     @Autowired
     private LogoutHandler logoutHandler;
@@ -30,26 +29,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/home", "/register", "parent.jsp","/resources/style.css", "/resources/images/*").permitAll()
                 .antMatchers("/welcome").hasAuthority("USER")
-                .anyRequest().fullyAuthenticated()
-                .and()
+                    .anyRequest().fullyAuthenticated()
+                    .and()
                 .formLogin()
-                .loginPage("/login")
-                .failureUrl("/login?error")
-                .successHandler(authenticationHandler)
-                .usernameParameter("name")
-                .permitAll()
-                .and()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/welcome")
+                    .failureUrl("/login?error=true")
+                    .usernameParameter("username")
+                    .permitAll()
+                    .and()
                 .logout()
-                .clearAuthentication(true)
-                .addLogoutHandler(logoutHandler)
-                .logoutUrl("/logout");
+                    .clearAuthentication(true)
+                    .addLogoutHandler(logoutHandler)
+                    .logoutUrl("/logout");
 
         http.csrf().disable();
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());
     }
-
 }

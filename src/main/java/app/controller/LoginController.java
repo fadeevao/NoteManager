@@ -3,7 +3,6 @@ package app.controller;
 
 import app.CurrentUser;
 import app.LogoutHandler;
-import app.entities.User;
 import app.login.LoginBean;
 import app.login.LoginBeanToUserConverter;
 import app.login.LoginDelegate;
@@ -52,48 +51,7 @@ public class LoginController
 		currentUser =  (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		ModelAndView model = new ModelAndView("welcome");
 		model.addObject("user", currentUser.getUsername());
-		return model;
-	}
-	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public ModelAndView executeLogin(@ModelAttribute("loginBean")LoginBean loginBean)
-	{
-		ModelAndView model= null;
-		boolean userExists = loginDelegate.checkUsernameExists(loginBean.getName());
-
-		//check if username exists
-		if (userExists) {
-
-			try
-			{
-				//check if overall credentials provided are valid
-				boolean isValidUser = loginDelegate.isValidUser(loginBean.getName(), loginBean.getPassword());
-				if(isValidUser)
-				{
-					model = new ModelAndView("welcome");
-					model.addObject("user", loginBean.getName());
-					User convertedUser = converter.convert(loginBean, loginDelegate.getIdForUserFromLoginBean(loginBean));
-					log.info("User " + convertedUser.getName() + " has logged in");
-				}
-				else
-				{
-					model = new ModelAndView("login");
-					model.addObject("loginBean", loginBean);
-					model.addObject("message", "Invalid credentials!");
-					log.info("Invalid attempt to login");
-				}
-
-			}
-			catch(Exception e)
-			{
-				log.error("Exception occurred when user tried to log into the app", e);
-			}
-		} else {
-			model = new ModelAndView("login");
-			model.addObject("loginBean", loginBean);
-			model.addObject("message", "Invalid credentials");
-			log.info("Invalid attempt to login");
-		}
-
+		log.info(String.format("User %s is viewing the welcome page", currentUser.getUsername()));
 		return model;
 	}
 
@@ -115,12 +73,12 @@ public class LoginController
 			return new ModelAndView("register");
 		}
 
-		boolean userExists = loginDelegate.checkUsernameExists(user.getName());
+		boolean userExists = loginDelegate.checkUsernameExists(user.getUsername());
 		if (!userExists) {
 			try
 			{
 				loginDelegate.saveUser(user);
-				log.info("New user has been registered with username: " + user.getName());
+				log.info(String.format("New user has been registered with username: %s",  user.getUsername()));
 				modelAndView = new ModelAndView("home");
 			}
 			catch(Exception e)

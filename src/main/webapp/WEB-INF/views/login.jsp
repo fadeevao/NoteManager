@@ -9,17 +9,18 @@
 </head>
 
 <body>
+
 	<form:form id="loginForm" method="post" action="/login"
 		modelAttribute="loginBean" class="dark-matter">
-		<c:if test="${not empty message}">
-			<p class="error-message">Invalid credentials! Please double check your details and try again.</p>
+		<c:if test="${param.error}">
+			<div class="error-message">Invalid username or password, please try again</div>
 		</c:if>
-
-		<form:label path="name">Enter your name</form:label>
-		<form:input id="name" name="name" path="name" placeholder="Your name"/>
+		<br>
+		<form:label path="username">Enter your username</form:label>
+		<form:input id="username" username="username" path="username" placeholder="Your username"/>
 		<br>
 		<form:label path="password">Please enter your password</form:label>
-		<form:password id="password" name="password" path="password" placeholder="Your password"/>
+		<form:password id="password" username="password" path="password" placeholder="Your password"/>
 		<br>
 		<input type="submit" value="Login" class="button"/>
 		<a href="home" class="button" >Go Back</a>

@@ -55,13 +55,14 @@ public class NoteBookController {
 		return new ModelAndView("addNote");
     }
 
+	@PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/notes", method = RequestMethod.GET)
     public ModelAndView displayAllNotes(ModelMap model) {
 		if (currentUser == null) currentUser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	model.addAttribute("notes",  (ArrayList<Note>) noteUtils.getAllNotes(currentUser.getId()));
     	model.addAttribute("user", currentUser.getUser());
     	return new ModelAndView("notes");
-}
+	}
 
 	@PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/notes/{name}", method = RequestMethod.GET)
@@ -69,7 +70,8 @@ public class NoteBookController {
     	model.addAttribute("note", noteUtils.getNote(name));
     	log.info("Retrieving details about a note: " + name);
     	return new ModelAndView("note");
-}
+	}
+
 	@PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public ModelAndView deleteNotes(ModelMap entities) {
@@ -77,6 +79,7 @@ public class NoteBookController {
     	return new ModelAndView("redirect:/notes");
     }
 
+	@PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/deleteSelectedNotes", method = RequestMethod.POST)
     public ModelAndView deleteSelectedNotes(HttpServletRequest request) throws FileNotFoundException, UnsupportedEncodingException {
     	String[] selectedNotes = request.getParameterValues("selected");

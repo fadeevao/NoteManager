@@ -9,7 +9,7 @@ public class LoginBeanToUserConverter {
 
 	public User convert(LoginBean bean, long id) {
 		User user = new User();
-		user.setName(bean.getName());
+		user.setName(bean.getUsername());
 		user.setId(id);
 		return user;
 	}

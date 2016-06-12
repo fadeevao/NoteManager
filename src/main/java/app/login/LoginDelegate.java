@@ -7,8 +7,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.sql.SQLException;
-
 @Component
 public class LoginDelegate
 {
@@ -19,21 +17,11 @@ public class LoginDelegate
 		return  userUtils.isUserNameAlreadyInUse(username);
 	}
 
-	public boolean isValidUser(String username, String password) throws SQLException
-	{return true;
-	}
-
 	public void saveUser(LoginBean loginbean) {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String passwordHash = passwordEncoder.encode(loginbean.getPassword());
-		User user = new User(loginbean.getName(), passwordHash);
+		User user = new User(loginbean.getUsername(), passwordHash);
 		user.setHash(passwordHash);
 		userUtils.saveUser(user);
 	}
-
-	public long getIdForUserFromLoginBean(LoginBean loginBean) {
-		return userUtils.getIdFromName(loginBean.getName());
-	}
-
-
 }

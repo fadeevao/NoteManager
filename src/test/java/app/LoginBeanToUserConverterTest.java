@@ -25,7 +25,7 @@ public class LoginBeanToUserConverterTest {
 	public void testConvertion() {
 		LoginBean bean = new LoginBean();
 		bean.setPassword(PASSWORD);
-		bean.setName(USERNAME);
+		bean.setUsername(USERNAME);
 
 		User user = converter.convert(bean, ID);
 		assertEquals(user.getName(), USERNAME);

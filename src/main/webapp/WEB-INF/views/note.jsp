@@ -9,7 +9,7 @@
 <body>
 	<div class="dark-matter">
 		<h1>Note information</h1>
-		<h2>Note name:</h2>
+		<h2>Note username:</h2>
 		<p>${note.getName()}</p>
 		<h2>Note size:</h2>
 		<p>${note.getSize()}</p>

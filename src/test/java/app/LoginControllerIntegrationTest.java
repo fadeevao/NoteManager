@@ -69,7 +69,7 @@ public class LoginControllerIntegrationTest extends IntegrationTest{
 //
 //
 //		this.mockMvc.perform(post("/register")
-//				.param("user", user.getName())
+//				.param("user", user.getUsername())
 //				.param("password", user.getPassword())
 //	               )
 //			.andExpect(status().isOk())
@@ -79,13 +79,13 @@ public class LoginControllerIntegrationTest extends IntegrationTest{
 //	@Test
 //	public void testRegisterWithInvalidPassword() throws Exception{
 //		User user = new User();
-//		user.setName("username");
+//		user.setUsername("username");
 //		user.setPassword("p%^&*%&*&7894654");
 //		Mockito.when(loginDelegate.checkUsernameExists(Mockito.anyString())).thenReturn(false);
 //
 //
 //		this.mockMvc.perform(post("/register")
-//				.param("username", user.getName())
+//				.param("username", user.getUsername())
 //				.param("password", user.getPassword())
 //	               )
 //			.andExpect(status().isOk())
@@ -109,33 +109,7 @@ public class LoginControllerIntegrationTest extends IntegrationTest{
 //		 	.andExpect(redirectedUrl("/home"));
 //	}
 
-	@Test
-	public void testExecuteLoginUserExistsAndPasswordIsCorrect() throws Exception{
-		LoginBean loginBean = getLoginBean();
-		Mockito.when(loginDelegate.checkUsernameExists(Mockito.anyString())).thenReturn(true);
-		Mockito.when(loginDelegate.isValidUser(Mockito.anyString(),Mockito.anyString())).thenReturn(true);
 
-		this.mockMvc.perform(post("/login")
-				.param("username", loginBean.getName())
-				.param("password", loginBean.getPassword())
-	               )
-			.andExpect(status().isOk())
-			.andExpect(view().name("welcome"));
-	}
-
-	@Test
-	public void testExecuteLoginUserExistsIncorrectPasswordSupplied() throws Exception{
-		LoginBean loginBean = getLoginBean();
-		Mockito.when(loginDelegate.checkUsernameExists(Mockito.anyString())).thenReturn(true);
-		Mockito.when(loginDelegate.isValidUser(Mockito.anyString(),Mockito.anyString())).thenReturn(false);
-
-		this.mockMvc.perform(post("/login")
-				.param("username", loginBean.getName())
-				.param("password", loginBean.getPassword())
-	               )
-			.andExpect(status().isOk())
-			.andExpect(view().name("login"));
-	}
 
 	@Test
 	public void testExecuteLoginUserDoesNotExist() throws Exception{
@@ -143,16 +117,15 @@ public class LoginControllerIntegrationTest extends IntegrationTest{
 		Mockito.when(loginDelegate.checkUsernameExists(Mockito.anyString())).thenReturn(false);
 
 		this.mockMvc.perform(post("/login")
-				.param("username", loginBean.getName())
+				.param("username", loginBean.getUsername())
 				.param("password", loginBean.getPassword())
 	               )
-			.andExpect(status().isOk())
-			.andExpect(view().name("login"));
+			.andExpect(status().isMethodNotAllowed());
 	}
 
 	private LoginBean getLoginBean() {
 		LoginBean loginBean = new LoginBean();
-		loginBean.setName("username");
+		loginBean.setUsername("username");
 		loginBean.setPassword("password");
 		return loginBean;
 	}
