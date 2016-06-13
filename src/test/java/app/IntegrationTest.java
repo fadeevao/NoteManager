@@ -15,4 +15,5 @@ public class IntegrationTest {
         viewResolver.setPrefix("/WEB-INF/jsp/view/");
         viewResolver.setSuffix(".jsp");
     }
+
 }

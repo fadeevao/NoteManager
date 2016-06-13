@@ -37,8 +37,7 @@ public class LoginController
 	public ModelAndView displayLogin()
 	{
 		ModelAndView model = new ModelAndView("login");
-		LoginBean loginBean = new LoginBean();
-		model.addObject("loginBean", loginBean);
+		model.addObject("loginBean", new LoginBean());
 		return model;
 	}
 
