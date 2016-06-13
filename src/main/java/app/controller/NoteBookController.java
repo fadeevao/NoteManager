@@ -1,8 +1,8 @@
 package app.controller;
 
 
-import app.CurrentUser;
 import app.entities.Note;
+import app.login.CurrentUser;
 import app.utils.NoteUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/")
@@ -43,7 +42,7 @@ public class NoteBookController {
 		}
 		if (currentUser == null) currentUser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	noteUtils.addNote(new Note(note.getName(), note.getContent(), currentUser.getId()));
-        modelMap.addAttribute("notes",(ArrayList<Note>)  noteUtils.getAllNotes(currentUser.getId()));
+        modelMap.addAttribute("notes", noteUtils.getAllNotes(currentUser.getId()));
         log.info("Added a new note to collection with name: "+ note.getName());
 		return new ModelAndView("redirect:/notes");
     }
@@ -59,7 +58,7 @@ public class NoteBookController {
     @RequestMapping(value = "/notes", method = RequestMethod.GET)
     public ModelAndView displayAllNotes(ModelMap model) {
 		if (currentUser == null) currentUser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	model.addAttribute("notes",  (ArrayList<Note>) noteUtils.getAllNotes(currentUser.getId()));
+    	model.addAttribute("notes", noteUtils.getAllNotes(currentUser.getId()));
     	model.addAttribute("user", currentUser.getUser());
     	return new ModelAndView("notes");
 	}
@@ -74,7 +73,7 @@ public class NoteBookController {
 
 	@PreAuthorize("hasAuthority('USER')")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public ModelAndView deleteNotes(ModelMap entities) {
+    public ModelAndView deleteNotes() {
     	noteUtils.deleteAllNotes();
     	return new ModelAndView("redirect:/notes");
     }

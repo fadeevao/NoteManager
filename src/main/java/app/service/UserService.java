@@ -1,7 +1,7 @@
 package app.service;
 
 
-import app.CurrentUser;
+import app.login.CurrentUser;
 import app.entities.User;
 import app.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

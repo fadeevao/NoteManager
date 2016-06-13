@@ -1,10 +1,9 @@
 package app.controller;
 
 
-import app.CurrentUser;
 import app.LogoutHandler;
+import app.login.CurrentUser;
 import app.login.LoginBean;
-import app.login.LoginBeanToUserConverter;
 import app.login.LoginDelegate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ public class LoginController
 {
 	private static final Logger log = Logger.getLogger(LoginController.class);
 
-
 	private CurrentUser currentUser;
 
 	@Autowired
@@ -34,8 +32,6 @@ public class LoginController
 
 	@Autowired
 	private LoginDelegate loginDelegate;
-
-	private LoginBeanToUserConverter converter = new LoginBeanToUserConverter();
 
 	@RequestMapping(value="/login",method=RequestMethod.GET)
 	public ModelAndView displayLogin()
