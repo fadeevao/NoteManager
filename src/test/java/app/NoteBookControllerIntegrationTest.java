@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(MockitoJUnitRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {NoteManagerMainApp.class})
+@ContextConfiguration(classes = {NoteManagerMainApp.class, SecurityConfig.class})
 public class NoteBookControllerIntegrationTest extends IntegrationTest {
 
 	@Mock
@@ -56,17 +56,20 @@ public class NoteBookControllerIntegrationTest extends IntegrationTest {
 
 	@Test
 	public void testGetNote() throws Exception {
-		Mockito.when(noteUtils.getNote("note1")).thenReturn(new Note());
-		 this.mockMvc.perform(get("/notes/note1"))
+		Note modelAttributeNote = new Note("name", "content");
+		Mockito.when(noteUtils.getNote("note1")).thenReturn(modelAttributeNote);
+		this.mockMvc.perform(get("/notes/note1"))
 		  			.andExpect(status().isOk())
-		            .andExpect(view().name("note"));
+		            .andExpect(view().name("note"))
+		 			.andExpect(model().attribute("note", modelAttributeNote));
 	}
 
 	@Test
 	public void testAddNote() throws Exception {
-
 		 this.mockMvc.perform(get("/addNote"))
-		  			.andExpect(status().isOk());
+		  			.andExpect(status().isOk())
+		 			.andExpect(model().attribute("note", new Note()))
+		 			.andExpect(view().name("addNote"));
 	}
 
 //	@Test

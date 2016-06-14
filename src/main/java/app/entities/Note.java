@@ -1,5 +1,7 @@
 package app.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -115,5 +117,29 @@ public class Note implements Serializable {
 	public String getFormattedDate(DateTime dateTime) {
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy, hh:mm");
 		return dateTime.toString(fmt);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Note note = (Note) o;
+
+		return new EqualsBuilder()
+				.append(size, note.size)
+				.append(name, note.name)
+				.append(content, note.content)
+				.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37)
+				.append(name)
+				.append(size)
+				.append(content)
+				.toHashCode();
 	}
 }
