@@ -30,8 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/home", "/register", "parent.jsp","/resources/style.css", "/resources/images/*").permitAll()
-                .antMatchers("/welcome").hasAuthority("USER")
-                    .anyRequest().fullyAuthenticated()
                     .and()
                 .formLogin()
                     .loginPage("/login")

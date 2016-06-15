@@ -5,8 +5,6 @@ import app.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class UserUtils {
 
@@ -17,15 +15,6 @@ public class UserUtils {
         userRepository.save(user);
     }
 
-    /*
-	 * Used when a user tries to log in to check whether the provided user details and generated hash match database records
-	 * @param name
-	 * @param hash
-	 */
-    public boolean areUserDCredentialsCorrect(String name, String hash) {
-        List<User> users = userRepository.findByNameAndPasswordHash(name, hash);
-        return !users.isEmpty();
-    }
 
     public boolean isUserNameAlreadyInUse(String name) {
         User user = userRepository.findByName(name);
@@ -35,7 +24,6 @@ public class UserUtils {
     public Long getIdFromName(String name) {
         return userRepository.findByName(name).getId();
     }
-
 
 }
 

@@ -8,11 +8,11 @@ import app.login.LoginDelegate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
-@Controller
+@RestController
 public class LoginController
 {
 	private static final Logger log = Logger.getLogger(LoginController.class);
@@ -38,15 +38,6 @@ public class LoginController
 	{
 		ModelAndView model = new ModelAndView("login");
 		model.addObject("loginBean", new LoginBean());
-		return model;
-	}
-
-	@RequestMapping(value="/welcome", method=RequestMethod.GET)
-	public ModelAndView welcome(HttpServletRequest request) {
-		currentUser =  (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		ModelAndView model = new ModelAndView("welcome");
-		model.addObject("user", currentUser.getUsername());
-		log.info(String.format("User %s is viewing the welcome page", currentUser.getUsername()));
 		return model;
 	}
 
