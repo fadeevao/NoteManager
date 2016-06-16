@@ -34,6 +34,4 @@ public class NoteManagerMainApp extends WebMvcConfigurerAdapter {
             DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
-
-
 }

@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(MockitoJUnitRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {NoteManagerMainApp.class, SecurityConfig.class})
-public class NoteBookControllerIntegrationTest extends IntegrationTest {
+@ContextConfiguration(classes = {NoteManagerMainApp.class})
+public class NoteBookControllerNoSecurityConfiguredIntegrationTest extends IntegrationTest {
 
 	@Mock
 	private NoteUtils noteUtils;
@@ -42,23 +42,23 @@ public class NoteBookControllerIntegrationTest extends IntegrationTest {
 
 	@Test
 	public void testDeleteAllNotes() throws Exception {
-		 this.mockMvc.perform(get("/delete"))
+		 this.mockMvc.perform(get("/notebook/delete"))
 		            .andExpect(status().is(302)) //redirect
-		            .andExpect(redirectedUrl("/notes"));
+		            .andExpect(redirectedUrl("/notebook/notes"));
 	}
 
 	@Test
 	public void testDeleteSelectedNotes() throws Exception {
-		 this.mockMvc.perform(post("/deleteSelectedNotes"))
+		 this.mockMvc.perform(post("/notebook/deleteSelectedNotes"))
 		            .andExpect(status().is(302)) //redirect
-		            .andExpect(redirectedUrl("/notes"));
+		            .andExpect(redirectedUrl("/notebook/notes"));
 	}
 
 	@Test
 	public void testGetNote() throws Exception {
 		Note modelAttributeNote = new Note("name", "content");
 		Mockito.when(noteUtils.getNote("note1")).thenReturn(modelAttributeNote);
-		this.mockMvc.perform(get("/notes/note1"))
+		this.mockMvc.perform(get("/notebook/notes/note1"))
 		  			.andExpect(status().isOk())
 		            .andExpect(view().name("note"))
 		 			.andExpect(model().attribute("note", modelAttributeNote));
@@ -66,20 +66,10 @@ public class NoteBookControllerIntegrationTest extends IntegrationTest {
 
 	@Test
 	public void testAddNote() throws Exception {
-		 this.mockMvc.perform(get("/addNote"))
+		 this.mockMvc.perform(get("/notebook/addNote"))
 		  			.andExpect(status().isOk())
 		 			.andExpect(model().attribute("note", new Note()))
 		 			.andExpect(view().name("addNote"));
 	}
-
-//	@Test
-//	public void testDisplayAllNotes() throws Exception {
-//		User user = new User("Username");
-//		user.setId(12345L);
-//		Mockito.when(noteUtils.getAllNotes(12345)).thenReturn(new ArrayList<Note>());
-//		 this.mockMvc.perform(get("/notes"))
-//			.andExpect(status().isOk())
-//			.andExpect(view().name("notes"));
-//	}
 
 }

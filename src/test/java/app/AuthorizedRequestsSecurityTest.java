@@ -1,6 +1,7 @@
 package app;
 
 
+import app.entities.Note;
 import app.login.LoginBean;
 import app.login.LoginDelegate;
 import org.junit.Before;
@@ -41,33 +42,52 @@ public class AuthorizedRequestsSecurityTest {
                 .apply(springSecurity())
                 .build();
 
-        setUpUserAccount();
+        //setUpUserAccount();
     }
 
     @Test
     public void testLoginAuthenticationOk() throws Exception {
+        setUpUserAccount();
         mvc
                 .perform(formLogin())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/welcome"));
+                .andExpect(redirectedUrl("/notebook/welcome"));
     }
 
     @Test
-    @WithMockUser(username = "user", roles = "USER" )
+    @WithMockUser(username = "user")
     public void testGetWelcomePageWhenAuthorized() throws Exception{
-        mvc.perform(get("/welcome"))
+        setUpUserAccount();
+        mvc.perform(get("/notebook/welcome"))
                 .andExpect(view().name("welcome"));
     }
 
     @Test
-    @WithMockUser(username = "user", roles = "USER" )
+    @WithMockUser(username = "user" )
     public void accessNotes() throws Exception{
-        mvc.perform(get("/notes"))
+        setUpUserAccount();
+        mvc.perform(get("/notebook/notes"))
                 .andExpect(view().name("notes"));
     }
 
+    @Test
+    @WithMockUser(username = "user" )
+    public void getAddNoteScreen() throws Exception{
+        mvc.perform(get("/notebook/addNote"))
+                .andExpect(view().name("addNote"))
+                .andExpect(model().attribute("note", new Note()));
+    }
+
+
+    @Test
+    @WithMockUser(username = "user" )
+    public void getNoteByName() throws Exception{
+        mvc.perform(get("/notebook/notes/note1"))
+                .andExpect(view().name("note"));
+    }
+
     private  void setUpUserAccount() {
-        if (!loginDelegate.checkUsernameExists("user")) {
+        if (!loginDelegate.usernameExists("user")) {
             LoginBean loginBean = new LoginBean();
             loginBean.setUsername("user");
             loginBean.setPassword("password");

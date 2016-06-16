@@ -9,7 +9,7 @@
 		<jsp:include page="logout.jsp" />
 		<h2 style="margin-top: 30px">Add a new note:</h2>
 		<form:form method="POST" modelAttribute="note"
-			action="/addNote">
+			action="/notebook/addNote">
 
 			<form:label path="name">Title</form:label>
 			<form:input path="name" />

@@ -13,7 +13,7 @@ public class LoginDelegate
 	@Autowired
 	private UserUtils userUtils;
 
-	public boolean checkUsernameExists(String username) {
+	public boolean usernameExists(String username) {
 		return  userUtils.isUserNameAlreadyInUse(username);
 	}
 

@@ -13,7 +13,7 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
         this.user = user;
     }
     public CurrentUser(org.springframework.security.core.userdetails.User user, User entityuser) {
-        super(user.getUsername(), user.getPassword(), user.getAuthorities());
+        super(user.getUsername(), entityuser.getHash(), user.getAuthorities());
         this.user = entityuser;
     }
 

@@ -21,9 +21,5 @@ public class UserUtils {
         return user != null;
     }
 
-    public Long getIdFromName(String name) {
-        return userRepository.findByName(name).getId();
-    }
-
 }
 

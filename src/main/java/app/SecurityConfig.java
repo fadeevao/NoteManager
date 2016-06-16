@@ -29,11 +29,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/home", "/register", "parent.jsp","/resources/style.css", "/resources/images/*").permitAll()
+                .antMatchers("/home", "/register", "parent.jsp","/resources/**").permitAll()
+                    .and()
+                .authorizeRequests()
+                    .anyRequest().authenticated()
                     .and()
                 .formLogin()
                     .loginPage("/login")
-                    .defaultSuccessUrl("/welcome")
+                    .defaultSuccessUrl("/notebook/welcome")
                     .failureUrl("/login?error=true")
                     .usernameParameter("username")
                     .permitAll()
@@ -41,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                     .clearAuthentication(true)
                     .addLogoutHandler(logoutHandler)
-                    .logoutUrl("/logout");
+                    .logoutUrl("/notebook/logout");
 
         http.csrf().disable();
     }

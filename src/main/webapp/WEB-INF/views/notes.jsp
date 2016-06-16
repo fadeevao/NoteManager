@@ -17,7 +17,7 @@
 	<a href="addNote" class="button">Add a new note</a>
 
 
-	<form method="post" action="/deleteSelectedNotes"
+	<form method="post" action="/notebook/deleteSelectedNotes"
 		class="form">
 		<div id="wrap">
 			<c:forEach items="${notes}" var="note" varStatus="status">
@@ -25,7 +25,7 @@
 
 				<div class="box">
 					<div class="innerContent">
-						<a class="noteInfo" href="/notes/${note.getName()}"><c:out
+						<a class="noteInfo" href="/notebook/notes/${note.getName()}"><c:out
 								value="${note.getName()}" /></a>
 						<div class="roundedTwo">
 							<input id="roundedTwo" type="checkbox" name="selected"
@@ -40,14 +40,14 @@
 
 		<c:if test="${notes.size() > 0}">
 		
-			<form action="/deleteSelectedNotes" >
+			<form action="/notebook/deleteSelectedNotes" >
 				<input class="button" type="submit" style="margin-top: 30px" value="Delete selected notes">
 			</form>
 		</c:if>
 	</form>
 
 	<c:if test="${notes.size() > 0}">
-		<form action="/delete" >
+		<form action="/notebook/delete" >
 			<input type="submit" class="button" style="margin-top: 10px" value="Delete all notes">
 		</form>
 	</c:if>

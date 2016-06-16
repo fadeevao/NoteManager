@@ -54,7 +54,7 @@ public class UnauthorizedRequestsSecurityTest {
 
     @Test
     public void testGetWelcomePageWhenUnauthorizedRedirectToLogin() throws Exception{
-        MvcResult result = mvc.perform(get("/welcome"))
+        MvcResult result = mvc.perform(get("/notebook/welcome"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertTrue(result.getResponse().getRedirectedUrl().contains("/login"));
@@ -62,7 +62,7 @@ public class UnauthorizedRequestsSecurityTest {
 
     @Test
     public void testGetNotesPageWhenUnauthorizedRedirectToLogin() throws Exception{
-        MvcResult result = mvc.perform(get("/notes"))
+        MvcResult result = mvc.perform(get("/notebook/notes"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertTrue(result.getResponse().getRedirectedUrl().contains("/login"));
@@ -70,7 +70,7 @@ public class UnauthorizedRequestsSecurityTest {
 
     @Test
     public void testAddNotePageWhenUnauthorizedRedirectToLogin() throws Exception{
-        MvcResult result = mvc.perform(get("/addNote"))
+        MvcResult result = mvc.perform(get("/notebook/addNote"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertTrue(result.getResponse().getRedirectedUrl().contains("/login"));
@@ -78,7 +78,7 @@ public class UnauthorizedRequestsSecurityTest {
 
     @Test
     public void testPostNotePageWhenUnauthorizedRedirectToLogin() throws Exception{
-        MvcResult result = mvc.perform(post("/addNote"))
+        MvcResult result = mvc.perform(post("/notebook/addNote"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertTrue(result.getResponse().getRedirectedUrl().contains("/login"));
@@ -86,7 +86,7 @@ public class UnauthorizedRequestsSecurityTest {
 
     @Test
     public void testLookAtTheNoteWhenUnauthorizedRedirectToLogin() throws Exception{
-        MvcResult result = mvc.perform(get("/notes/note1"))
+        MvcResult result = mvc.perform(get("/notebook/note1"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertTrue(result.getResponse().getRedirectedUrl().contains("/login"));
@@ -94,7 +94,7 @@ public class UnauthorizedRequestsSecurityTest {
 
     @Test
     public void testDeleteNoteWhenUnauthorizedRedirectToLogin() throws Exception{
-        MvcResult result = mvc.perform(get("/delete"))
+        MvcResult result = mvc.perform(get("/notebook/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertTrue(result.getResponse().getRedirectedUrl().contains("/login"));
@@ -102,7 +102,7 @@ public class UnauthorizedRequestsSecurityTest {
 
     @Test
     public void testDeleteSelectedNotesWhenUnauthorizedRedirectToLogin() throws Exception{
-        MvcResult result = mvc.perform(post("/deleteSelectedNotes"))
+        MvcResult result = mvc.perform(post("/notebook/deleteSelectedNotes"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertTrue(result.getResponse().getRedirectedUrl().contains("/login"));

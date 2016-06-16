@@ -2,17 +2,16 @@ package app.controller;
 
 
 import app.LogoutHandler;
-import app.login.CurrentUser;
 import app.login.LoginBean;
 import app.login.LoginDelegate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,12 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
-@RestController
+@Controller
 public class LoginController
 {
 	private static final Logger log = Logger.getLogger(LoginController.class);
-
-	private CurrentUser currentUser;
 
 	@Autowired
 	private LogoutHandler logoutHandler;
@@ -52,40 +49,28 @@ public class LoginController
 	@RequestMapping(value="/register",method=RequestMethod.POST)
 	public ModelAndView executeRegistration(@Valid @ModelAttribute LoginBean user, BindingResult bindingResult)
 	{
-		ModelAndView modelAndView =  null;
-
+		ModelAndView modelAndView = null;
 		//validate user object
 		if (bindingResult.hasErrors()) {
 			return new ModelAndView("register");
 		}
 
-		boolean userExists = loginDelegate.checkUsernameExists(user.getUsername());
-		if (!userExists) {
-			try
-			{
-				loginDelegate.saveUser(user);
-				log.info(String.format("New user has been registered with username: %s",  user.getUsername()));
-				modelAndView = new ModelAndView("home");
-			}
-			catch(Exception e)
-			{
-				log.error("Exception occured when user tried to register in the app", e);
-			}
+		if (!loginDelegate.usernameExists(user.getUsername())) {
+			loginDelegate.saveUser(user);
+			log.info(String.format("New user has been registered with username: %s",  user.getUsername()));
+			modelAndView = new ModelAndView("home");
 		} else {
 			modelAndView = new ModelAndView("register");
 			modelAndView.addObject("invalidUsernameMessage", "Invalid username");
 			log.error("Invalid attempt to register with existing credentials");
-
 		}
-
 		return modelAndView;
 	}
 
 	@RequestMapping(value="/home",method=RequestMethod.GET)
 	public ModelAndView getHome()
 	{
-		ModelAndView model = new ModelAndView("home");
-		return model;
+		return new ModelAndView("home");
 	}
 
 	@RequestMapping(value="/logout",method=RequestMethod.GET)
@@ -93,5 +78,4 @@ public class LoginController
 		logoutHandler.logout(request, httpServletResponse, SecurityContextHolder.getContext().getAuthentication());
 		return new ModelAndView("redirect:/home");
 	}
-
 }

@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(MockitoJUnitRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {NoteManagerMainApp.class})
-public class LoginControllerIntegrationTest extends IntegrationTest{
+public class LoginControllerNoSecurityConfiguredIntegrationTest extends IntegrationTest{
 
 	@Mock
 	LoginDelegate loginDelegate;
@@ -60,7 +60,7 @@ public class LoginControllerIntegrationTest extends IntegrationTest{
 //	public void testRegisterWithValidPassword() throws Exception{
 //		User user = new User("username");
 //		user.setPassword("password78964");
-//		Mockito.when(loginDelegate.checkUsernameExists("username")).thenReturn(false);
+//		Mockito.when(loginDelegate.usernameExists("username")).thenReturn(false);
 //
 //
 //		this.mockMvc.perform(post("/register")
@@ -76,7 +76,7 @@ public class LoginControllerIntegrationTest extends IntegrationTest{
 //		User user = new User();
 //		user.setUsername("username");
 //		user.setPassword("p%^&*%&*&7894654");
-//		Mockito.when(loginDelegate.checkUsernameExists(Mockito.anyString())).thenReturn(false);
+//		Mockito.when(loginDelegate.usernameExists(Mockito.anyString())).thenReturn(false);
 //
 //
 //		this.mockMvc.perform(post("/register")
