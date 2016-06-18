@@ -42,7 +42,6 @@ public class AuthorizedRequestsSecurityTest {
                 .apply(springSecurity())
                 .build();
 
-        //setUpUserAccount();
     }
 
     @Test

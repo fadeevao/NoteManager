@@ -20,8 +20,7 @@ import javax.validation.Valid;
 
 
 @Controller
-public class LoginController
-{
+public class LoginController {
 	private static final Logger log = Logger.getLogger(LoginController.class);
 
 	@Autowired
@@ -49,7 +48,6 @@ public class LoginController
 	@RequestMapping(value="/register",method=RequestMethod.POST)
 	public ModelAndView executeRegistration(@Valid @ModelAttribute LoginBean user, BindingResult bindingResult)
 	{
-		ModelAndView modelAndView = null;
 		//validate user object
 		if (bindingResult.hasErrors()) {
 			return new ModelAndView("register");
@@ -58,13 +56,13 @@ public class LoginController
 		if (!loginDelegate.usernameExists(user.getUsername())) {
 			loginDelegate.saveUser(user);
 			log.info(String.format("New user has been registered with username: %s",  user.getUsername()));
-			modelAndView = new ModelAndView("home");
+			return new ModelAndView("home");
 		} else {
-			modelAndView = new ModelAndView("register");
+			ModelAndView modelAndView = new ModelAndView("register");
 			modelAndView.addObject("invalidUsernameMessage", "Invalid username");
 			log.error("Invalid attempt to register with existing credentials");
+			return modelAndView;
 		}
-		return modelAndView;
 	}
 
 	@RequestMapping(value="/home",method=RequestMethod.GET)

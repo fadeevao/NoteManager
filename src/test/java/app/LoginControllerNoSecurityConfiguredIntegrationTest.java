@@ -9,12 +9,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -28,6 +31,9 @@ public class LoginControllerNoSecurityConfiguredIntegrationTest extends Integrat
 
 	@Mock
 	LoginDelegate loginDelegate;
+
+	@Mock
+	LogoutHandler logoutHandler;
 
 	@InjectMocks
 	LoginController loginController;
@@ -56,36 +62,33 @@ public class LoginControllerNoSecurityConfiguredIntegrationTest extends Integrat
 		            .andExpect(view().name("register"));
 	}
 
-//	@Test
-//	public void testRegisterWithValidPassword() throws Exception{
-//		User user = new User("username");
-//		user.setPassword("password78964");
-//		Mockito.when(loginDelegate.usernameExists("username")).thenReturn(false);
-//
-//
-//		this.mockMvc.perform(post("/register")
-//				.param("user", user.getUsername())
-//				.param("password", user.getPassword())
-//	               )
-//			.andExpect(status().isOk())
-//			.andExpect(view().name("home"));
-//	}
-//
-//	@Test
-//	public void testRegisterWithInvalidPassword() throws Exception{
-//		User user = new User();
-//		user.setUsername("username");
-//		user.setPassword("p%^&*%&*&7894654");
-//		Mockito.when(loginDelegate.usernameExists(Mockito.anyString())).thenReturn(false);
-//
-//
-//		this.mockMvc.perform(post("/register")
-//				.param("username", user.getUsername())
-//				.param("password", user.getPassword())
-//	               )
-//			.andExpect(status().isOk())
-//			.andExpect(view().name("register"));
-//	}
+	@Test
+	public void testRegisterWithValidPassword() throws Exception{
+		LoginBean loginBean = getLoginBean();
+		Mockito.when(loginDelegate.usernameExists("username")).thenReturn(false);
+
+
+		this.mockMvc.perform(post("/register")
+				.param("user", loginBean.getUsername())
+				.param("password", loginBean.getPassword())
+	               )
+			.andExpect(status().isOk())
+			.andExpect(view().name("home"));
+	}
+
+	@Test
+	public void testRegisterWithUsernameThatIsAlreadyTaken() throws Exception{
+		LoginBean loginBean = getLoginBean();
+		Mockito.when(loginDelegate.usernameExists("username")).thenReturn(true);
+
+
+		this.mockMvc.perform(post("/register")
+				.param("username", loginBean.getUsername())
+				.param("password", loginBean.getPassword())
+	               )
+			.andExpect(status().isOk())
+			.andExpect(view().name("register"));
+	}
 
 	@Test
 	public void testGetHome() throws Exception {
@@ -94,17 +97,13 @@ public class LoginControllerNoSecurityConfiguredIntegrationTest extends Integrat
 		 	.andExpect(view().name("home"));
 	}
 
-//	@Test
-//	public void testLogout() throws Exception {
-//		User user = new User("Username");
-//		user.setId(USER_ID);
-//		 this.mockMvc.perform(get("/logout")
-//		 	.sessionAttr("user", user))
-//		 	.andExpect(status().is(302)) //redirect
-//		 	.andExpect(redirectedUrl("/home"));
-//	}
-
-
+	@Test
+	public void testLogout() throws Exception {
+		doNothing().when(logoutHandler).logout(any(), any(), any());
+		 this.mockMvc.perform(get("/logout"))
+		 	.andExpect(status().is(302))
+		 	.andExpect(redirectedUrl("/home"));
+	}
 
 	@Test
 	public void testExecuteLoginUserDoesNotExist() throws Exception{
@@ -118,9 +117,7 @@ public class LoginControllerNoSecurityConfiguredIntegrationTest extends Integrat
 	}
 
 	private LoginBean getLoginBean() {
-		LoginBean loginBean = new LoginBean();
-		loginBean.setUsername("username");
-		loginBean.setPassword("password");
+		LoginBean loginBean = new LoginBean("username", "password");
 		return loginBean;
 	}
 }

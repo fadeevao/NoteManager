@@ -35,13 +35,16 @@ public class NoteBookController {
 	@Autowired
 	private CurrentUserInitializer currentUserInitializer;
 
+	private static final String REDIRECT_TO_NOTES_URL="redirect:/notebook/notes";
+
 
 	@RequestMapping(path="/welcome", method = RequestMethod.GET)
 	public ModelAndView welcome() {
 		currentUser =  currentUserInitializer.initializeCurrentUser();
 		ModelAndView model = new ModelAndView("welcome");
-		model.addObject("user", currentUser.getUsername());
-		log.info(String.format("User %s is viewing the welcome page", currentUser.getUsername()));
+		String username = currentUser.getUsername();
+		model.addObject("user", username);
+		log.info(String.format("User %s is viewing the welcome page", username));
 		return model;
 	}
 
@@ -53,9 +56,9 @@ public class NoteBookController {
 		}
 		currentUser =  currentUserInitializer.initializeCurrentUser();
     	noteUtils.addNote(new Note(note.getName(), note.getContent(), currentUser.getId()));
+		log.info("Added a new note to collection with name: "+ note.getName());
         modelMap.addAttribute("notes", noteUtils.getAllNotes(currentUser.getId()));
-        log.info("Added a new note to collection with name: "+ note.getName());
-		return new ModelAndView("redirect:/notebook/notes");
+		return new ModelAndView(REDIRECT_TO_NOTES_URL);
     }
 
     @RequestMapping(path = "/addNote", method = RequestMethod.GET)
@@ -82,7 +85,7 @@ public class NoteBookController {
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public ModelAndView deleteNotes() {
     	noteUtils.deleteAllNotes();
-    	return new ModelAndView("redirect:/notebook/notes");
+    	return new ModelAndView(REDIRECT_TO_NOTES_URL);
     }
 
     @RequestMapping(value = "/deleteSelectedNotes", method = RequestMethod.POST)
@@ -92,7 +95,7 @@ public class NoteBookController {
     		noteUtils.deleteSelectedNotes(selectedNotes);
     		log.info("Deleted notes: " + selectedNotes.length);
     	}
-    	return new ModelAndView("redirect:/notebook/notes");
+    	return new ModelAndView(REDIRECT_TO_NOTES_URL);
     }
 
 }
