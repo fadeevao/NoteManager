@@ -32,12 +32,12 @@ public class User implements Serializable {
 	private String passwordHash;
 
 
+	//hardcoded role as there is just one
 	@Column
 	private String role = "USER";
 	
 	
-	public User() {
-	}
+	public User() {}
 
 	public User(String name) {
 		this.name = name;
@@ -70,14 +70,6 @@ public class User implements Serializable {
 
 	public void setHash(String hash) {
 		this.passwordHash = hash;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
 	}
 
 	@Override
