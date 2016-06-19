@@ -63,17 +63,24 @@ public class LoginControllerNoSecurityConfiguredIntegrationTest extends Integrat
 	}
 
 	@Test
-	public void testRegisterWithValidPassword() throws Exception{
+	public void testRegisterWithValidDetails() throws Exception{
 		LoginBean loginBean = getLoginBean();
 		Mockito.when(loginDelegate.usernameExists("username")).thenReturn(false);
 
 
 		this.mockMvc.perform(post("/register")
-				.param("user", loginBean.getUsername())
-				.param("password", loginBean.getPassword())
-	               )
+				.param("username", loginBean.getUsername())
+				.param("password", loginBean.getPassword()))
 			.andExpect(status().isOk())
 			.andExpect(view().name("home"));
+	}
+
+	@Test
+	public void testRegisterWithMissingDetails() throws Exception{
+		this.mockMvc.perform(post("/register")
+				.param("user", "name"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("register"));
 	}
 
 	@Test

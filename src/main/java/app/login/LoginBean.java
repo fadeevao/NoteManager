@@ -4,13 +4,17 @@ package app.login;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.validation.constraints.NotNull;
+
 /*
  * Login bean used for passing details from  login form to the app
  */
 public class LoginBean {
-	
+
+	@NotNull
 	private String username;
-	
+
+	@NotNull
 	private String password;
 
 	public LoginBean(String name, String password) {
