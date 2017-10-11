@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(MockitoJUnitRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {NoteManagerMainApp.class})
-public class LoginControllerNoSecurityConfiguredIntegrationTest extends IntegrationTest{
+public class LoginControllerIntegrationTest extends IntegrationTest{
 
 	@Mock
 	LoginDelegate loginDelegate;

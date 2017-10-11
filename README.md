@@ -1,11 +1,14 @@
+# Project objectives
 
-This is the first project I created to learn a bit of Spring and Hibernate in my free time. Also, I wanted to explore integration testing and mocking in a bit more detail.
+This is the first project I created to learn a bit of Spring and Hibernate in my free time. I also wanted to explore integration testing and mocking in a bit more detail.
 
-This project is a simple web application where a user can create an account, log into it and then start adding notes such as interesting recipe, reminder about meeting and so on.
+# Overview
+This project is a simple web application where a user can create notes such as reminders, meeting notes and so on. All users need to create an account and authenticate before
+they are granted accesss to their notebook.
 
 For testing I used MockMVC to test controllers behaviour. I also used Mockito for mocking out some objects.
 
-The UI is very simple, you can see examples in the "screenshots" directory. Some snippets of code and pictures have been taken from the internet and then modified according to my needs. Whenever it's been done, a comment has been made to indicate where the resource comes from. The UI is very simple and would require more testing if the application was ever to be released.
+The UI is very simple, you can see examples in the "screenshots" directory. Some snippets of code and pictures have been taken from the internet and then modified according to my needs. Whenever it's been done, a comment has been made to indicate where the resource comes from. The UI is very simple and would require more testing if this was not an educational project
 
 Please note that this is a learning project.
 

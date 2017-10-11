@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(MockitoJUnitRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {NoteManagerMainApp.class})
-public class NoteBookControllerNoSecurityConfiguredIntegrationTest extends IntegrationTest {
+public class NoteBookControllerIntegrationTest extends IntegrationTest {
 
 	@Mock
 	private NoteUtils noteUtils;
